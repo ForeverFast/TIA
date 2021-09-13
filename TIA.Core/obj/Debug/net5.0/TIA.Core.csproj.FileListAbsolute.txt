@@ -1,0 +1,12 @@
+C:\Users\ivans\source\repos\TIA\TIA.Core\bin\Debug\net5.0\TIA.Core.deps.json
+C:\Users\ivans\source\repos\TIA\TIA.Core\bin\Debug\net5.0\TIA.Core.dll
+C:\Users\ivans\source\repos\TIA\TIA.Core\bin\Debug\net5.0\ref\TIA.Core.dll
+C:\Users\ivans\source\repos\TIA\TIA.Core\bin\Debug\net5.0\TIA.Core.pdb
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.csproj.AssemblyReference.cache
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.AssemblyInfoInputs.cache
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.AssemblyInfo.cs
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.csproj.CoreCompileInputs.cache
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.dll
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\ref\TIA.Core.dll
+C:\Users\ivans\source\repos\TIA\TIA.Core\obj\Debug\net5.0\TIA.Core.pdb
