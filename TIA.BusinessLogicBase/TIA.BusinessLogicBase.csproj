@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TIA.Core\TIA.Core.csproj" />
+    <ProjectReference Include="..\TIA.EntityFramework\TIA.EntityFramework.csproj" />
+  </ItemGroup>
+
+</Project>

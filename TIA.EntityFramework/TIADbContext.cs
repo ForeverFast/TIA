@@ -11,11 +11,11 @@ namespace TIA.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
-
         }
 
         public TIADbContext(DbContextOptions options) : base(options)
         {
+
         }
     }
 }
