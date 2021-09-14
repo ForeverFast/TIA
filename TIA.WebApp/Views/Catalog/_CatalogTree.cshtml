@@ -1,0 +1,26 @@
+﻿@using TIA.Core.DTOClasses;
+@model IEnumerable<CatalogDTO>
+
+@{
+    void drawTree(IEnumerable<CatalogDTO> catalogs)
+    {
+        <ul>
+            @foreach (CatalogDTO catalogDTO in catalogs)
+            {
+                <li>
+                    <span>
+                        <a asp-controller="Catalog" asp-action="GetById"></a>
+                    </span>
+                </li>
+
+                if (catalogDTO.Catalogs.Any())
+                    drawTree(catalogDTO.Catalogs);
+            }
+        </ul>
+    }
+}
+
+@if (Model.Any())
+    drawTree(Model);
+
+@*<a href="/Catalog/Index/@catalogDTO.Id">@catalogDTO.Title</a>*@

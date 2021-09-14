@@ -7,7 +7,7 @@ namespace TIA.Core.Converters
     public static class EfEntityToDtoConverter
     {
         public static ProductDTO ConvertProduct(this Product product)
-            => new ProductDTO
+            => product == null ? null : new ProductDTO 
             {
                 Id = product.Id,
                 ParentCatalogId = product.ParentCatalogId,
@@ -19,7 +19,7 @@ namespace TIA.Core.Converters
             };
 
         public static CatalogDTO ConvertCatalog(this Catalog catalog)
-            => new CatalogDTO
+            => catalog == null ? null : new CatalogDTO
             {
                 Id = catalog.Id,
                 ParentCatalogId = catalog.ParentCatalogId,

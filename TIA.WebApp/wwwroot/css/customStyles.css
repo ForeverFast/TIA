@@ -1,0 +1,21 @@
+﻿.mainDiv {
+    position: relative;
+}
+
+.leftSide {
+    position: absolute;
+    width: 20%;
+   
+    float: left;
+    min-height: 650px;
+
+    border: 2px;
+    border-block-color: dimgray;
+    background-color: gray
+}
+
+.rightSide {
+    width: 80%;
+    margin-left: 20%;
+}
+
