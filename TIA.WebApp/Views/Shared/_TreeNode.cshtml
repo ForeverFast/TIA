@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CatalogDTO>
+
+<ul>
+    @foreach (CatalogDTO catalogDTO in Model)
+    {
+        <li id="@catalogDTO.Id">
+            <span>
+                <a asp-controller="Catalog" asp-action="GetById" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>
+                @*<a class="btn btn-primary popup" asp-controller="Catalog" asp-action="CreateEdit" asp-route-parentId="@catalogDTO.Id" asp-route-itemId="0"
+           data-toggle="modal" data-target="#modal-create-edit-catalog" id="CatalogModel" >
+            +
+        </a>*@
+                <a class="btn btn-primary popup" data-url="Catalog/CreateEdit" data-item-id="0" data-parent-id="@catalogDTO.Id"
+                   data-toggle="modal" data-target="#modal-create-edit-catalog" id="CatalogModel">
+                    +
+                </a>
+                <button>-</button>
+
+                @*"*@
+            </span>
+       
+        </li>
+
+        if (catalogDTO.Catalogs.Any())
+            @Html.Partial("_TreeNode", catalogDTO.Catalogs);
+    }
+</ul>

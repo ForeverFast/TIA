@@ -17,19 +17,25 @@ namespace TIA.ConsoleTest
                 Product product = new Product
                 {
                     Title = "product1",
-                    ParentCatalogId = catalog.Id
+                    ParentCatalogId = catalog.Id,
+                    Description = "descrp product1",
+                    Price = 232
                 };
 
                 Product product2 = new Product
                 {
                     Title = "product2",
-                    ParentCatalogId = catalog.Id
+                    ParentCatalogId = catalog.Id,
+                    Description = "descrp product2",
+                    Price = 333
                 };
 
                 Product product3 = new Product
                 {
                     Title = "product2",
-                    ParentCatalogId = catalog.Id
+                    ParentCatalogId = catalog.Id,
+                    Description = "descrp product3",
+                    Price = 4578
                 };
 
                 context.Products.AddRange(product, product2, product3);
@@ -39,13 +45,17 @@ namespace TIA.ConsoleTest
                 Product product4 = new Product
                 {
                     Title = "product4",
-                    ParentCatalogId = catalog.Id
+                    ParentCatalogId = catalog.Id,
+                    Description = "descrp product4",
+                    Price = 2322
                 };
 
                 Product product5 = new Product
                 {
                     Title = "product5",
-                    ParentCatalogId = catalog.Id
+                    ParentCatalogId = catalog.Id,
+                    Description = "descrp product5",
+                    Price = 1111
                 };
 
                 context.Products.AddRange(product4, product5);

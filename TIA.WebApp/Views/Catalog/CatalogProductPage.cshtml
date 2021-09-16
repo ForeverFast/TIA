@@ -1,0 +1,21 @@
+﻿@using TIA.Core.DTOClasses
+@model CatalogDTO
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+@if (Model?.Products != null && Model?.Products.Count() > 0)
+{
+    <table>
+        <tr><th>Название</th><th>Описание</th><th>Цена</th></tr>
+        @foreach (ProductDTO productDTO in Model.Products)
+        {
+            <tr><td>@productDTO.Title</td><td>@productDTO.Description</td><td>@productDTO.Price</td></tr>
+        }
+    </table>
+}
+else
+{
+    <h1>Товаров нет((</h1>
+    <h2>Наполни меня (͡° ͜ʖ ͡°)</h2>
+}

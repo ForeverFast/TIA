@@ -31,7 +31,16 @@
 
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="mainDiv">
+                <div class="leftSide">
+                    <vc:catalog-tree  />
+                    @*@await Component.InvokeAsync("CatalogTree")*@
+                </div>
+                <partial name="_Modal" />
+                <div class="rightSide">
+                    @RenderBody()
+                </div>
+            </div>
         </main>
     </div>
 

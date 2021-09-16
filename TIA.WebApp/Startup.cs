@@ -27,11 +27,18 @@ namespace TIA.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
 
             services.AddSingleton(typeof(TIADbContextFactory));
             services.AddSingleton<ICatalogDataService, CatalogDataService>();
             services.AddSingleton<IProductDataService, ProductDataService>();
             services.AddSingleton<ITiaModel, TiaModel>();
+
+            services.AddMvc(st=> {
+
+                st.EnableEndpointRouting = false;
+            
+            } );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,21 +55,35 @@ namespace TIA.WebApp
 
             app.UseStaticFiles();
 
-            app.UseRouting();
+            //app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "product",
-                    pattern: "{controller=Product}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                   name: "product",
-                   pattern: "{controller=Catalog}/{action=Index}/{id?}");
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //    endpoints.MapControllerRoute(
+            //        name: "product",
+            //        pattern: "{controller=Product}/{action=Index}/{id?}");
+            //    endpoints.MapControllerRoute(
+            //       name: "product",
+            //       pattern: "{controller=Catalog}/{action=Index}/{id?}");
+            //});
+
+            app.UseMvc(routes => {
+
+                routes.MapRoute(
+                   name: "default",
+                   template: "{controller=Home}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //    name: "product",
+                //    template: "{controller=Product}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //   name: "catalog",
+                //   template: "{controller=Catalog}/{action=Index}");
+
             });
         }
     }

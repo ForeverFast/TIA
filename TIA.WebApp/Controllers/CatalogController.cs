@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TIA.BusinessLogicBase.Abstractions;
+using TIA.Core.DTOClasses;
 using TIA.WebApp.Models;
 
 namespace TIA.WebApp.Controllers
 {
+    //[Route("Catalog")]
     public class CatalogController : Controller
     {
         private readonly ITiaModel _tiaModel;
@@ -21,26 +24,58 @@ namespace TIA.WebApp.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        ////[Route("Index")]
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        [Route("GetById/{id:Guid?}")]
+        public async Task<ActionResult<CatalogDTO>> GetById(Guid id)
         {
-            CatalogViewModel cVm = new CatalogViewModel
-            {
-                Catalog = null,
-                CatalogTree = await _tiaModel.GetCatalogsTreeAsync()
-            };
+            CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync(id);
+
+            return View("CatalogProductPage", catalogDTO);
+        }
+
+        //[Route("GetById/{catalogDTO?}")]
+        //public IActionResult GetById(CatalogDTO catalogDTO)
+        //{
+        //    return View("CatalogProductPage", catalogDTO);
+        //}
+
+        //[Route("CreateEdit/{parentId}/{itemId}")]
+        public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
+        {
+            CatalogDTO model = new CatalogDTO { IsActive = true };
           
-            return View(cVm);
-        }
-
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            CatalogViewModel cVm = new CatalogViewModel
+            if (itemId != null && itemId != Guid.Empty)
             {
-                Catalog = await _tiaModel.GetCatalogByIdAsync(id),
-                CatalogTree = await _tiaModel.GetCatalogsTreeAsync()
-            };
+                model = await _tiaModel.GetCatalogByIdAsync((Guid)itemId);
+            }
+            else
+            {
+                model = model with { ParentCatalogId = parentId };
+            }
 
-            return View(cVm);
+            return PartialView("_CreateEdit", model);
         }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        //[Route("CreateEdit/{model}")]
+        public async Task<ActionResult> CreateEdit(CatalogDTO model)
+        {
+            //validate user  
+            if (!ModelState.IsValid)
+                return PartialView("_CreateEdit", model);
+
+            CatalogDTO dbCreatedCatalog = await _tiaModel.AddCatalogAsync(model);
+
+            //save user into database   
+            return RedirectToAction("GetById", dbCreatedCatalog);
+        }
+
+
     }
 }

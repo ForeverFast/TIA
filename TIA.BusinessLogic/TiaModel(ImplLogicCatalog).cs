@@ -34,6 +34,9 @@ namespace TIA.BusinessLogic
             if (catalogDTO.Id == Guid.Empty)
                 throw new ArgumentNullException(nameof(catalogDTO.Id), "Для изменение каталога нужен его Id.");
 
+            if (string.IsNullOrEmpty(catalogDTO.Title))
+                throw new ArgumentNullException(nameof(catalogDTO.Title), "У каталога должно быть название.");
+
             CatalogDTO dbChangedCatalog = catalogDataService.Update(catalogDTO, catalogDTO.Id).Result;
             return dbChangedCatalog;
         }

@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.BusinessLogic", "TIA.Bu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.BusinessLogicBase", "TIA.BusinessLogicBase\TIA.BusinessLogicBase.csproj", "{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.WebApp", "TIA.WebApp\TIA.WebApp.csproj", "{F5B4216C-81A0-4330-889E-1E0C1700BF7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.ConsoleTest", "TIA.ConsoleTest\TIA.ConsoleTest.csproj", "{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B4216C-81A0-4330-889E-1E0C1700BF7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B4216C-81A0-4330-889E-1E0C1700BF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B4216C-81A0-4330-889E-1E0C1700BF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B4216C-81A0-4330-889E-1E0C1700BF7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
