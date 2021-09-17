@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TIA.Core.Converters;
 using TIA.Core.DTOClasses;
 using TIA.Core.EfEntities;
+using Z.EntityFramework.Plus;
 
 namespace TIA.EntityFramework.Services
 {
@@ -21,7 +22,8 @@ namespace TIA.EntityFramework.Services
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {              
                 Catalog result = await context.Catalogs
-                    .Include(c=>c.Products)
+                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
+                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
                     .FirstOrDefaultAsync(c => c.Id == guid);
                 await context.SaveChangesAsync();
 
@@ -33,10 +35,29 @@ namespace TIA.EntityFramework.Services
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
-                List<Catalog> result = await Task.FromResult(context.Catalogs.ToList());
-                await context.SaveChangesAsync();
-
+                List<Catalog> result = await Task.FromResult(context.Catalogs
+                    .Where(c => c.IsActive == true)
+                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
+                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
+                    .Include(c => c.ParentCatalog)
+                    .ToList());
+                
                 return result.Where(c => c.ParentCatalogId == null).Select(c => c.ConvertCatalog());
+            }
+        }
+
+        public virtual async Task<IEnumerable<CatalogDTO>> GetCatalogsLineCollection()
+        {
+            using (TIADbContext context = _contextFactory.CreateDbContext(null))
+            {
+                List<Catalog> result = await Task.FromResult(context.Catalogs
+                    .Where(c => c.IsActive == true)
+                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
+                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
+                    .Include(c => c.ParentCatalog)
+                    .ToList());
+               
+                return result.Select(c => c.ConvertCatalog());
             }
         }
 
@@ -46,6 +67,7 @@ namespace TIA.EntityFramework.Services
             {
                 Catalog catalog = entity.ConvertCatalogDTO();
 
+                catalog.IsActive = true;
                 EntityEntry<Catalog> createdResult = await context.Catalogs.AddAsync(catalog);
                 await context.SaveChangesAsync();
 

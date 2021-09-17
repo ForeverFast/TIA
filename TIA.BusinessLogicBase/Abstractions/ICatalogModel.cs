@@ -11,6 +11,8 @@ namespace TIA.BusinessLogicBase.Abstractions
 
         Task<List<CatalogDTO>> GetCatalogsTreeAsync();
 
+        Task<List<CatalogDTO>> GetCatalogsLineCollectionAsync();
+
         Task<CatalogDTO> AddCatalogAsync(CatalogDTO catalogDTO);
 
         Task<CatalogDTO> ChangeCatalogAsync(CatalogDTO catalogDTO);

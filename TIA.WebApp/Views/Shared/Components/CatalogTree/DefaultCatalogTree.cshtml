@@ -3,7 +3,9 @@
 @if (Model.Any())
     @await Html.PartialAsync("_TreeNode", Model)
 
+<a class="btn btn-primary popup" asp-controller="Catalog" asp-action="CatalogTable" >Открыть таблицу каталогов</a>
 
-<a class="btn btn-primary popup" data-url="Catalog/CreateEdit" data-toggle="modal" data-target="#modal-create-edit-catalog" id="CatalogModel">Добавить новый каталог</a>
+
+@*<a class="btn btn-primary popup" data-url="Catalog/CreateEdit" data-toggle="modal" data-target="#modal-view" id="CatalogModel">Добавить новый каталог</a>*@
 
 

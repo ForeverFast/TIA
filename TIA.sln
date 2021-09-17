@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.Core", "TIA.Core\TIA.Core.csproj", "{A854FBE2-5221-4D0C-AA0B-9EF8E29B553C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.Core", "TIA.Core\TIA.Core.csproj", "{A854FBE2-5221-4D0C-AA0B-9EF8E29B553C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.EntityFramework", "TIA.EntityFramework\TIA.EntityFramework.csproj", "{A58771DA-D35A-4F57-9FF1-F9E3C175975D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.EntityFramework", "TIA.EntityFramework\TIA.EntityFramework.csproj", "{A58771DA-D35A-4F57-9FF1-F9E3C175975D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.BusinessLogic", "TIA.BusinessLogic\TIA.BusinessLogic.csproj", "{FA556256-6F52-4C6F-BA54-2FF0F50C07F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.BusinessLogic", "TIA.BusinessLogic\TIA.BusinessLogic.csproj", "{FA556256-6F52-4C6F-BA54-2FF0F50C07F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.BusinessLogicBase", "TIA.BusinessLogicBase\TIA.BusinessLogicBase.csproj", "{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.BusinessLogicBase", "TIA.BusinessLogicBase\TIA.BusinessLogicBase.csproj", "{FCC40DD2-76AC-4632-BF5E-05D4A9DCBA4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.WebApp", "TIA.WebApp\TIA.WebApp.csproj", "{F5B4216C-81A0-4330-889E-1E0C1700BF7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.WebApp", "TIA.WebApp\TIA.WebApp.csproj", "{F5B4216C-81A0-4330-889E-1E0C1700BF7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.ConsoleTest", "TIA.ConsoleTest\TIA.ConsoleTest.csproj", "{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.ConsoleTest", "TIA.ConsoleTest\TIA.ConsoleTest.csproj", "{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.Extentions", "TIA.Extentions\TIA.Extentions.csproj", "{D5928EDB-34F8-4E4D-BFDE-3E8A46BBE48B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1999387-C492-4E2A-BE7E-F3D54C56A0FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5928EDB-34F8-4E4D-BFDE-3E8A46BBE48B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5928EDB-34F8-4E4D-BFDE-3E8A46BBE48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5928EDB-34F8-4E4D-BFDE-3E8A46BBE48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5928EDB-34F8-4E4D-BFDE-3E8A46BBE48B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

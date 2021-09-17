@@ -1,31 +1,53 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 
-(function ($) {
-    function Index() {
-        var $this = this;
-        function initialize() {
 
-            $(".popup").on('click', function (e) {
-                modelPopup(this);
-            });
+$.ajaxSetup({ cache: false });
 
-            function modelPopup(reff) {
-                var url = $(reff).data('url');
-                $.get(url, { parentId: $(reff).data('parentId'), itemId: $(reff).data('itemId') } ).done(function (data) {
-                    debugger;
-                    $('#modal-create-edit-catalog').find(".modal-dialog").html(data);
-                    $('#modal-create-edit-catalog > .modal', data).modal("show");
-                });
+function Index() {
+    var $this = this;
+    function initialize() {
 
-            }
+        $(".popupCreateEdit").on('click', function (e) {
+            modelPopupCreateEdit(this);
+        });
+
+        $(".popupDelete").on('click', function (e) {
+            modelPopupDelete(this);
+        });
+
+        function showModal(data) {
+
+            $('#modal-view').find(".modal-dialog").html(data);
+            $('#modal-view > .modal', data).modal("show");
         }
 
-        $this.init = function () {
-            initialize();
-        };
+        function modelPopupCreateEdit(reff) {
+            var url = $(reff).data('url');
+            debugger;
+            $.get(url, { parentId: $(reff).data('parentId'), itemId: $(reff).data('itemId') }).done(function (data) {
+                showModal(data);
+            });
+        }
+
+        function modelPopupDelete(reff) {
+            var url = $(reff).data('url');
+            debugger;
+            $.get(url, { id: $(reff).data('id') }).done(function (data) {
+                showModal(data);
+            });
+        }
     }
-    $(function () {
-        var self = new Index();
-        self.init();
-    });
-}(jQuery));
+
+    $this.init = function () {
+        initialize();
+    };
+}
+
+$(function () {
+    var self = new Index();
+    self.init();
+});
+
+function deleteEntity(button) {
+
+}

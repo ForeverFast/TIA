@@ -13,5 +13,7 @@ namespace TIA.Core.DTOClasses
         public string Description { get; init; }
 
         public bool IsActive { get; init; }
+
+        public override string ToString() => this.Title;
     }
 }

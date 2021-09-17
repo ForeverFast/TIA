@@ -1,9 +1,15 @@
-﻿<div class="modal-content">
-    <div class="modal-header">
-        <h4 class="modal-title">Подтверждение действия</h4>
-    </div>
-    <div class="modal-body">
-        <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Нет</button>
-        <button class="btn btn-success relative" id="btnSubmit" type="submit">Да</button>
-    </div>
+﻿@model CatalogDTO
+<div class="modal-content">
+    <form asp-controller="@ViewData["info_controller"]" asp-action="@ViewData["info_action"]" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+            <h4 class="modal-title">Подтверждение действия</h4>
+        </div>
+        <div class="modal-body">
+            <input name="id" value="@Model.Id" type="hidden" class="form-control" />
+
+            <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Нет</button>
+            <button class="btn btn-success relative" id="btnSubmit" type="submit">Да</button>
+            <button type="button" class="" onclick="deleteEntity(this)"></button>
+        </div>
+    </form>
 </div>

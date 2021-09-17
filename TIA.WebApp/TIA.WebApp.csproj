@@ -9,6 +9,7 @@
     <ProjectReference Include="..\TIA.BusinessLogic\TIA.BusinessLogic.csproj" />
     <ProjectReference Include="..\TIA.Core\TIA.Core.csproj" />
     <ProjectReference Include="..\TIA.EntityFramework\TIA.EntityFramework.csproj" />
+    <ProjectReference Include="..\TIA.Extentions\TIA.Extentions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

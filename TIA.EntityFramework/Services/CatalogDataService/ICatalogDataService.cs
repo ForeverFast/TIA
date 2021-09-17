@@ -7,5 +7,7 @@ namespace TIA.EntityFramework.Services
     public interface ICatalogDataService : IDataService<CatalogDTO>
     {
         Task<IEnumerable<CatalogDTO>> GetCatalogsTree();
+
+        Task<IEnumerable<CatalogDTO>> GetCatalogsLineCollection();
     }
 }

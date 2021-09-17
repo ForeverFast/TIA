@@ -14,6 +14,9 @@ namespace TIA.BusinessLogicBase
         public Task<List<CatalogDTO>> GetCatalogsTreeAsync() => Task.Factory.StartNew(() => GetCatalogsTree());
         protected abstract List<CatalogDTO> GetCatalogsTree();
 
+        public Task<List<CatalogDTO>> GetCatalogsLineCollectionAsync() => Task.Factory.StartNew(() => GetCatalogsLineCollection());
+        protected abstract List<CatalogDTO> GetCatalogsLineCollection();
+
         public Task<CatalogDTO> AddCatalogAsync(CatalogDTO catalogDTO) => Task.Factory.StartNew(() => AddCatalog(catalogDTO));
         protected abstract CatalogDTO AddCatalog(CatalogDTO catalogDTO);
 

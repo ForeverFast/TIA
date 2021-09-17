@@ -20,6 +20,12 @@ namespace TIA.BusinessLogic
             return tree;
         }
 
+        protected override List<CatalogDTO> GetCatalogsLineCollection()
+        {
+            List<CatalogDTO> tree = catalogDataService.GetCatalogsLineCollection().Result.ToList();
+            return tree;
+        }
+
         protected override CatalogDTO AddCatalog(CatalogDTO catalogDTO)
         {
             if (string.IsNullOrEmpty(catalogDTO.Title))

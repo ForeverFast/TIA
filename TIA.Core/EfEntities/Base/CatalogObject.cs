@@ -15,5 +15,7 @@ namespace TIA.Core.EfEntities
         public string Description { get; set; }
 
         public bool IsActive { get; set; }
+
+        public override string ToString() => this.Title;
     }
 }
