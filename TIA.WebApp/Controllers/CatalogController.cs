@@ -69,10 +69,9 @@ namespace TIA.WebApp.Controllers
                 model = model with { ParentCatalogId = parentId };
             }
 
-            //ViewData["listCatalogs"] = listCatalogs;
             ViewBag.listCatalogs = listCatalogs;
 
-            return PartialView("_CreateEdit", model);
+            return PartialView("_CreateEditCatalog", model);
         }
 
         [ValidateAntiForgeryToken]
@@ -80,7 +79,7 @@ namespace TIA.WebApp.Controllers
         public async Task<ActionResult> CreateEdit(CatalogDTO model)
         {
             if (!ModelState.IsValid)
-                return PartialView("_CreateEdit", model);
+                return PartialView("_CreateEditCatalog", model);
 
             CatalogDTO temp = null;
             if (model.Id == Guid.Empty)
@@ -118,8 +117,7 @@ namespace TIA.WebApp.Controllers
 
                 if (result)
                 {
-                    //return RedirectToAction(nameof(this.CatalogTable));
-                    return Ok();
+                    return RedirectToAction(nameof(this.CatalogTable));
                 }
                 else
                 {
