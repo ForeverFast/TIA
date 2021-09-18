@@ -12,7 +12,7 @@ using TIA.WebApp.Models;
 
 namespace TIA.WebApp.Controllers
 {
-    //[Route("Catalog")]
+    [Route("Catalog")]
     public class CatalogController : Controller
     {
         private readonly ITiaModel _tiaModel;
@@ -47,7 +47,8 @@ namespace TIA.WebApp.Controllers
         //    return View("CatalogProductPage", catalogDTO);
         //}
 
-        //[Route("CreateEdit/{parentId}/{itemId}")]
+        [HttpGet]
+        [Route("CreateEdit/{parentId?}/{itemId?}")]
         public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
         {
             CatalogDTO model = new CatalogDTO { IsActive = true };
@@ -76,6 +77,7 @@ namespace TIA.WebApp.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
+        [Route("CreateEdit")]
         public async Task<ActionResult> CreateEdit(CatalogDTO model)
         {
             if (!ModelState.IsValid)
@@ -92,13 +94,15 @@ namespace TIA.WebApp.Controllers
         }
 
 
-        public IActionResult Delete(CatalogDTO objToRemove)
+        [HttpGet]
+        [Route("Delete/{itemId?}")]
+        public IActionResult Delete(Guid id)
         {
             try
             {
                 ViewData["info_controller"] = "Catalog";
-                ViewData["info_action"] = "Delete";
-                return PartialView("_YesNoDialog", objToRemove);
+                ViewData["info_action"] = "DeleteConfirm";
+                return PartialView("_YesNoDialog", new CatalogDTO { Id = id });
             }
             catch(Exception ex)
             {
@@ -107,9 +111,10 @@ namespace TIA.WebApp.Controllers
            
         }
 
-
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<ActionResult> Delete(Guid id)
+        [Route("DeleteConfirm")]
+        public async Task<ActionResult> DeleteConfirm(Guid id)
         {
             try
             {

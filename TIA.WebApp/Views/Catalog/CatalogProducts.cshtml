@@ -5,11 +5,11 @@
 
 @if (Model?.Products != null && Model?.Products.Count() > 0)
 {
-    <table>
+    <table id="ProductTable">
         <tr><th>Название</th><th>Описание</th><th>Цена</th></tr>
         @foreach (ProductDTO productDTO in Model.Products)
         {
-            <tr><td>@productDTO.Title</td><td>@productDTO.Description</td><td>@productDTO.Price</td></tr>
+            @await Html.PartialAsync("_ProductTableData", productDTO)
         }
     </table>
 }
@@ -18,3 +18,11 @@ else
     <h1>Товаров нет((</h1>
     <h2>Наполни меня (͡° ͜ʖ ͡°)</h2>
 }
+
+<div>
+    <a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="0" data-parent-id="@Model.Id"
+       data-toggle="modal" data-target="#modal-view" id="Product-C">
+        +
+    </a>
+</div>
+

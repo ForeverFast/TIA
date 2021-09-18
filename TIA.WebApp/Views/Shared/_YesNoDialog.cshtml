@@ -1,15 +1,23 @@
 ﻿@model CatalogDTO
 <div class="modal-content">
-    <form asp-controller="@ViewData["info_controller"]" asp-action="@ViewData["info_action"]" method="post" enctype="multipart/form-data">
+    @*<form asp-controller="@ViewData["info_controller"]" asp-action="@ViewData["info_action"]" method="post" enctype="multipart/form-data">*@
+    <form asp-controller="Catalog" asp-action="DeleteConfirm" method="post" enctype="multipart/form-data">
         <div class="modal-header">
             <h4 class="modal-title">Подтверждение действия</h4>
         </div>
         <div class="modal-body">
-            <input name="id" value="@Model.Id" type="hidden" class="form-control" />
 
-            <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Нет</button>
-            <button class="btn btn-success relative" id="btnSubmit" type="submit">Да</button>
+            @Html.HiddenFor(model => model.Id)
             @*<button type="button" class="" onclick="deleteEntity(this)"></button>*@
         </div>
+
+        <div class="modal-footer">
+            <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Нет</button>
+            <button class="btn btn-success relative" id="btnSubmit" type="submit">
+                <i class="loader"></i>
+                Да
+            </button>
+        </div>
+
     </form>
 </div>
