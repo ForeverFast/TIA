@@ -47,7 +47,7 @@ namespace TIA.EntityFramework.Services
             {
                 Product product = entity.ConvertProductDTO();
 
-                var original = await context.Catalogs.FirstOrDefaultAsync(e => e.Id == guid);
+                var original = await context.Products.FirstOrDefaultAsync(e => e.Id == guid);
 
                 foreach (PropertyInfo propertyInfo in original.GetType().GetProperties())
                 {

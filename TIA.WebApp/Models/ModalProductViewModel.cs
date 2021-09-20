@@ -11,5 +11,6 @@ namespace TIA.WebApp.Models
         public ActionTypeEnum ActionType { get; set; }
 
         public List<CatalogDTO> CatalogList { get; set; }
+        public bool IsEmptyCatalog { get; set; }
     }
 }

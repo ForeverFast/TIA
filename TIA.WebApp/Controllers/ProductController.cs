@@ -35,7 +35,7 @@ namespace TIA.WebApp.Controllers
 
         [HttpGet]
         [Route("CreateEdit/{parentId?}/{itemId?}")]
-        public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
+        public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)    
         {
             ProductDTO model = new ProductDTO { IsActive = true };
 
@@ -56,12 +56,12 @@ namespace TIA.WebApp.Controllers
                 vm.ActionType = ActionTypeEnum.Add;
             }
 
+            vm.IsEmptyCatalog = (await _tiaModel.GetCatalogByIdAsync((Guid)parentId))?.Products.Count() == 0 ? true : false;
             vm.ProductDTO = model;
 
             return PartialView("_CreateEditProduct", vm);
         }
 
-        //[ValidateAntiForgeryToken]
         [HttpPost]
         [Route("CreateEdit/{product?}")]
         public async Task<ActionResult> CreateEdit(ProductDTO product)
@@ -75,7 +75,50 @@ namespace TIA.WebApp.Controllers
             else
                 temp = await _tiaModel.ChangeProductAsync(product);
             
-            return PartialView("_ProductTableData", temp);
+            return PartialView("_ProductTableElementData", temp);
+        }
+
+        [HttpGet]
+        [Route("Delete/{itemId?}")]
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                YesNoDialogViewModel vm = new YesNoDialogViewModel()
+                {
+                    ObjectDTO = new ProductDTO { Id = id },
+                    Controller = "Product"
+                };
+                return PartialView("_YesNoDialog", vm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(403);
+            }
+
+        }
+
+        [HttpPost]
+        [Route("DeleteConfirm/{obj?}")]
+        public async Task<ActionResult> DeleteConfirm(ProductDTO obj)
+        {
+            try
+            {
+                bool result = await _tiaModel.DeleteProductAsync(obj);
+
+                if (result)
+                {
+                    return Ok(obj.Id);
+                }
+                else
+                {
+                    return StatusCode(409);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }

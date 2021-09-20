@@ -9,12 +9,10 @@
 
     <form asp-action="CreateEdit" asp-controller="Catalog" method="post" enctype="multipart/form-data">
 
-        @Html.AntiForgeryToken()
-
         <div class="modal-body form-horizontal">
 
-            @Html.HiddenFor(model => model.Id)
-            @Html.HiddenFor(model => model.IsActive)
+            <input asp-for="Id" id="Id" name="Id" type="hidden" class="form-control" />
+            <input asp-for="IsActive" id="IsActive" name="IsActive" type="hidden" class="form-control" />
 
             <div class="form-group row">
                 <label asp-for="Title" class="col-sm-2 col-form-label"></label>

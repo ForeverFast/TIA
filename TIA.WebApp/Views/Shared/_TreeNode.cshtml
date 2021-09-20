@@ -3,7 +3,7 @@
 <ul>
     @foreach (CatalogDTO catalogDTO in Model)
     {
-        <li id="@catalogDTO.Id">
+        <li id="item-@catalogDTO.Id">
             <span>
                 <a asp-controller="Catalog" asp-action="GetById" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>
             </span>

@@ -4,11 +4,11 @@
 
 $.ajaxSetup({ cache: false });
 
-$(".popupCreateEdit").on('click', function (e) {
+$('#DataPage').on('click', '.popupCreateEdit', function (e) {
     modelPopupCreateEdit(this);
 });
 
-$(".popupDelete").on('click', function (e) {
+$('#DataPage').on('click', '.popupDelete', function (e) {
     modelPopupDelete(this);
 });
 
@@ -16,28 +16,53 @@ function showModal(data) {
 
     $('#modal-view').find(".modal-dialog").html(data);
     $('#modal-view > .modal', data).modal("show");
-
+    
     $('#CreateEditProductForm').submit(function (e) {
-        e.preventDefault()
-       
+        e.preventDefault();
+
         var formAction = $(this).attr("action");
-        var productForm = document.getElementById('CreateEditProductForm');
+        var productForm = $('#CreateEditProductForm').get(0);
         var actionType = productForm.dataset["actionType"];
         var product = $(productForm).serializeObject();
 
         $.post(formAction, { product: product }).done(function (data) {
-            debugger;
+
             if (actionType == "Add") {
-                insertProductHTML(data);
+                debugger;
+                if (productForm.dataset["isEmptyCatalog"] == "True") {
+                    $.ajax({
+                        url: "/Catalog/GetEmptyTable",
+                        type: "GET",
+                        async: false
+                    }).done(function (table) {
+                        $('#NoElementsData').hide();
+                        $('#ProductsData').html(table);
+                    });
+                }
+                insertTableItem(data);
             }
             else {
-                var table = document.getElementById('ProductTable');
-                var prElement = document.getElementById('product-' + product["id"]);
-                table.removeChild(prElement);
-
-                insertProductHTML(data);
+                $('#item-' + product["Id"]).get(0).remove();
+ 
+                var catalogId = $('#DataPage').get(0).dataset["catalogId"];           
+                if (catalogId == product["ParentCatalogId"])
+                    insertTableItem(data);
             }
-            
+
+            $('#modal-view').modal("hide");
+        });
+    });
+
+    $('#YesNoForm').submit(function (e) {
+        e.preventDefault();
+
+        var formAction = $(this).attr("action");
+        var ynForm = $('#YesNoForm').get(0);
+        var objectDTO = $(ynForm).serializeObject();
+        $.post(formAction, { obj: objectDTO }).done(function (data) {
+            $('#item-' + data).get(0).remove();
+
+            $('#modal-view').modal("hide");
         });
     });
 }
@@ -57,15 +82,14 @@ function modelPopupDelete(reff) {
         showModal(data);
     });
 }
-    
-function insertProductHTML(data) {
+
+function insertTableItem(data) {
     if (data != null) {
-        $('#ProductTable').append(data);
+        $('#ProductTable > tbody').append(data);
     } else {
         console.log('Не сохранилось...');
     }
 }
-
 
 $.fn.serializeObject = function () {
 

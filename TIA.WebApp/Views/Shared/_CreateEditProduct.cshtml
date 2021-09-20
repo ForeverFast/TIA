@@ -7,15 +7,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
     </div>
 
-    <form id="CreateEditProductForm" asp-action="CreateEdit" asp-controller="Product" method="post" enctype="multipart/form-data" data-action-type="@Model.ActionType.ToString()">
+    <form id="CreateEditProductForm" asp-action="CreateEdit" asp-controller="Product" method="post" enctype="multipart/form-data"
+          data-action-type="@Model.ActionType.ToString()" data-is-empty-catalog="@Model.IsEmptyCatalog">
 
         <div class="modal-body form-horizontal">
 
             <input asp-for="ProductDTO.Id" id="Id" name="Id" type="hidden" class="form-control" />
             <input asp-for="ProductDTO.IsActive" id="IsActive" name="IsActive" type="hidden" class="form-control" />
-
-            @*@Html.HiddenFor(model => model.ProductDTO.Id)
-            @Html.HiddenFor(model => model.ProductDTO.IsActive)*@
 
             <div class="form-group row">
                 <label asp-for="ProductDTO.Title" class="col-sm-2 col-form-label"></label>
@@ -34,31 +32,35 @@
             <div class="form-group row">
                 <label asp-for="ProductDTO.Price" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <textarea asp-for="ProductDTO.Price"  id="Price" name="Price" class="form-control" placeholder="Цена товара"></textarea>
+                    <textarea asp-for="ProductDTO.Price" id="Price" name="Price" class="form-control" placeholder="Цена товара"></textarea>
                 </div>
             </div>
 
-            <div class="form-group row">
-                <label asp-for="ProductDTO.ParentCatalogId" class="col-sm-2 col-form-label"></label>
-                <div class="col-sm-10">
-                    <select asp-for="ProductDTO.ParentCatalogId" id="ParentCatalogId" name="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
-                        @foreach (CatalogDTO catalogDTO in Model.CatalogList)
-                        {
-                            <option value="@catalogDTO.Id">@catalogDTO.Title</option>
-                        }
-                    </select>
+            @if (Model.ActionType == TIA.WebApp.Extentions.ActionTypeEnum.Add)
+            {
+                <input asp-for="ProductDTO.ParentCatalogId" id="ParentCatalogId" name="ParentCatalogId" type="hidden" class="form-control" />
+            }
+            else
+            {
+                <div class="form-group row">
+                    <label asp-for="ProductDTO.ParentCatalogId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <select asp-for="ProductDTO.ParentCatalogId" id="ParentCatalogId" name="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
+                            @foreach (CatalogDTO catalogDTO in Model.CatalogList)
+                            {
+                                <option value="@catalogDTO.Id">@catalogDTO.Title</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
+            }
+
+
 
         </div>
       
         <div class="modal-footer">
             <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Отмена</button>
-            @*<button data-dismiss="modal" class="btn btn-success relative" id="btnSubmit" type="button" onclick="saveProduct(@Model.ActionType.ToString())">
-                <i class="loader"></i>
-                Сохранить
-            </button>*@
-
             <button class="btn btn-success relative" id="btnSubmit" type="submit">
                 <i class="loader"></i>
                 Сохранить

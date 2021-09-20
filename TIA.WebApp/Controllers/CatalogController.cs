@@ -41,6 +41,14 @@ namespace TIA.WebApp.Controllers
             return View("CatalogProducts", catalogDTO);
         }
 
+        [HttpGet]
+        [Route("GetEmptyTable")]
+        public IActionResult GetEmptyTable()
+        {
+            return PartialView("_TableView");
+        }
+
+
         //[Route("GetById/{catalogDTO?}")]
         //public IActionResult GetById(CatalogDTO catalogDTO)
         //{
@@ -55,6 +63,8 @@ namespace TIA.WebApp.Controllers
 
             List<CatalogDTO> listCatalogs = (await _tiaModel.GetCatalogsLineCollectionAsync())
                 .Select(c => new CatalogDTO { Id = c.Id, Title = c.Title }).ToList();
+
+            listCatalogs.Add(new CatalogDTO { Title = "Корневой каталог" });
 
             if (itemId != null && itemId != Guid.Empty)
             {
@@ -75,13 +85,15 @@ namespace TIA.WebApp.Controllers
             return PartialView("_CreateEditCatalog", model);
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("CreateEdit")]
         public async Task<ActionResult> CreateEdit(CatalogDTO model)
         {
             if (!ModelState.IsValid)
                 return PartialView("_CreateEditCatalog", model);
+
+            if (model.ParentCatalogId == Guid.Empty)
+                model = model with { ParentCatalogId = null };
 
             CatalogDTO temp = null;
             if (model.Id == Guid.Empty)
@@ -100,9 +112,12 @@ namespace TIA.WebApp.Controllers
         {
             try
             {
-                ViewData["info_controller"] = "Catalog";
-                ViewData["info_action"] = "DeleteConfirm";
-                return PartialView("_YesNoDialog", new CatalogDTO { Id = id });
+                YesNoDialogViewModel vm = new YesNoDialogViewModel()
+                {
+                    ObjectDTO = new CatalogDTO { Id = id },
+                    Controller = "Catalog"
+                };
+                return PartialView("_YesNoDialog", vm);
             }
             catch(Exception ex)
             {
@@ -111,18 +126,17 @@ namespace TIA.WebApp.Controllers
            
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
-        [Route("DeleteConfirm")]
-        public async Task<ActionResult> DeleteConfirm(Guid id)
+        [Route("DeleteConfirm/{obj?}")]
+        public async Task<ActionResult> DeleteConfirm(CatalogDTO obj)
         {
             try
             {
-                bool result = await _tiaModel.DeleteCatalogAsync(new CatalogDTO { Id = id });
+                bool result = await _tiaModel.DeleteCatalogAsync(obj);
 
                 if (result)
                 {
-                    return RedirectToAction(nameof(this.CatalogTable));
+                    return Ok(obj.Id);
                 }
                 else
                 {

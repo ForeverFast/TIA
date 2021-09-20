@@ -1,0 +1,12 @@
+﻿@model IEnumerable<ProductDTO>
+
+<table id="ProductTable">
+    <tr><th>Название</th><th>Описание</th><th>Цена</th></tr>
+    @if (Model != null)
+    {
+        foreach (ProductDTO productDTO in Model)
+        {
+            @await Html.PartialAsync("_ProductTableElementData", productDTO)
+        }
+    }
+</table>
