@@ -33,12 +33,17 @@ namespace TIA.WebApp.Controllers
             return View(catalogDTOs);
         }
 
-        [Route("GetById/{id:Guid?}")]
-        public async Task<ActionResult<CatalogDTO>> GetById(Guid id)
+        [Route("Products/{id:Guid?}")]
+        public async Task<ActionResult<CatalogDTO>> Products(Guid? id)
         {
-            CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync(id);
+            if (id != null && id != Guid.Empty)
+            {
+                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync((Guid)id);
 
-            return View("CatalogProducts", catalogDTO);
+                if (catalogDTO != null)
+                    return View("CatalogProducts", catalogDTO);
+            }
+            return RedirectToPage("~/View/Shared/NotFoundPage");
         }
 
         [HttpGet]
@@ -47,13 +52,6 @@ namespace TIA.WebApp.Controllers
         {
             return PartialView("_TableView");
         }
-
-
-        //[Route("GetById/{catalogDTO?}")]
-        //public IActionResult GetById(CatalogDTO catalogDTO)
-        //{
-        //    return View("CatalogProductPage", catalogDTO);
-        //}
 
         [HttpGet]
         [Route("CreateEdit/{parentId?}/{itemId?}")]
@@ -80,17 +78,21 @@ namespace TIA.WebApp.Controllers
                 model = model with { ParentCatalogId = parentId };
             }
 
-            ViewBag.listCatalogs = listCatalogs;
+            ModalCatalogViewModel vm = new ModalCatalogViewModel();
+            vm.CatalogList = listCatalogs;
+            vm.CatalogDTO = model;
 
-            return PartialView("_CreateEditCatalog", model);
+            return PartialView("_CreateEditCatalog", vm);
         }
 
         [HttpPost]
         [Route("CreateEdit")]
-        public async Task<ActionResult> CreateEdit(CatalogDTO model)
+        public async Task<ActionResult> CreateEdit(ModalCatalogViewModel vm)
         {
             if (!ModelState.IsValid)
-                return PartialView("_CreateEditCatalog", model);
+                return PartialView("_CreateEditCatalog", vm);
+
+            CatalogDTO model = vm.CatalogDTO;
 
             if (model.ParentCatalogId == Guid.Empty)
                 model = model with { ParentCatalogId = null };
@@ -100,9 +102,9 @@ namespace TIA.WebApp.Controllers
                 temp = await _tiaModel.AddCatalogAsync(model);
             else
                 temp = await _tiaModel.ChangeCatalogAsync(model);
-            
 
-            return RedirectToAction(nameof(this.GetById), temp);
+
+            return RedirectToAction(nameof(this.Products), temp);
         }
 
 

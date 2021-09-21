@@ -5,12 +5,12 @@
     {
         <li id="item-@catalogDTO.Id">
             <span>
-                <a asp-controller="Catalog" asp-action="GetById" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>
+                <a asp-controller="Catalog" asp-action="Products" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>
             </span>
        
         </li>
 
         if (catalogDTO.Catalogs.Any())
-            @Html.Partial("_TreeNode", catalogDTO.Catalogs);
+            @Html.Partial("~/Views/Shared/Components/CatalogTree/_TreeNode.cshtml", catalogDTO.Catalogs);
     }
 </ul>

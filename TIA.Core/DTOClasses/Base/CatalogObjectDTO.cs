@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TIA.Core.DTOClasses
 {
@@ -6,8 +7,9 @@ namespace TIA.Core.DTOClasses
     {
         public Guid? ParentCatalogId { get; init; }
 
-        public CatalogDTO ParentCatalog { get; init; } 
-        
+        public CatalogDTO ParentCatalog { get; init; }
+
+        [Required(ErrorMessage = "Не указано название.")]
         public string Title { get; init; }
 
         public string Description { get; init; }

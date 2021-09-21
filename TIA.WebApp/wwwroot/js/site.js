@@ -16,7 +16,9 @@ function showModal(data) {
 
     $('#modal-view').find(".modal-dialog").html(data);
     $('#modal-view > .modal', data).modal("show");
-    
+    $.validator.unobtrusive.parse('#modal-view');
+
+
     $('#CreateEditProductForm').submit(function (e) {
         e.preventDefault();
 
@@ -24,8 +26,9 @@ function showModal(data) {
         var productForm = $('#CreateEditProductForm').get(0);
         var actionType = productForm.dataset["actionType"];
         var product = $(productForm).serializeObject();
+        var product2 = $(productForm).serialize();
 
-        $.post(formAction, { product: product }).done(function (data) {
+        $.post(formAction, { vm: product }).done(function (data) {
 
             if (actionType == "Add") {
                 debugger;
@@ -39,17 +42,20 @@ function showModal(data) {
                         $('#ProductsData').html(table);
                     });
                 }
+
                 insertTableItem(data);
             }
             else {
                 $('#item-' + product["Id"]).get(0).remove();
- 
-                var catalogId = $('#DataPage').get(0).dataset["catalogId"];           
+
+                var catalogId = $('#DataPage').get(0).dataset["catalogId"];
                 if (catalogId == product["ParentCatalogId"])
                     insertTableItem(data);
             }
 
             $('#modal-view').modal("hide");
+        }).fail(function (data) {
+            // todo?
         });
     });
 

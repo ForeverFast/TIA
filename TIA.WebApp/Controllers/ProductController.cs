@@ -30,12 +30,12 @@ namespace TIA.WebApp.Controllers
         {
             ProductDTO productDTO = await _tiaModel.GetProductByIdAsync(id);
 
-            return View("CatalogProducts", productDTO);
+            return null;//View("CatalogProducts", productDTO);
         }
 
         [HttpGet]
         [Route("CreateEdit/{parentId?}/{itemId?}")]
-        public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)    
+        public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
         {
             ProductDTO model = new ProductDTO { IsActive = true };
 
@@ -57,25 +57,40 @@ namespace TIA.WebApp.Controllers
             }
 
             vm.IsEmptyCatalog = (await _tiaModel.GetCatalogByIdAsync((Guid)parentId))?.Products.Count() == 0 ? true : false;
-            vm.ProductDTO = model;
+            vm.Id = model.Id;
+            vm.ParentCatalogId = model.ParentCatalogId;
+            vm.IsActive = model.IsActive;
+            vm.Title = model.Title;
+            vm.Description = model.Description;
+            vm.Price = model.Price;
 
             return PartialView("_CreateEditProduct", vm);
         }
 
         [HttpPost]
-        [Route("CreateEdit/{product?}")]
-        public async Task<ActionResult> CreateEdit(ProductDTO product)
+        [Route("CreateEdit/{vm?}")]
+        public async Task<ActionResult> CreateEdit(ModalProductViewModel vm)
         {
             if (!ModelState.IsValid)
-                return PartialView("_CreateEditProduct", product);
+                return BadRequest();
 
+            ProductDTO product = new ProductDTO
+            {
+                Id = vm.Id,
+                ParentCatalogId = vm.ParentCatalogId,
+                IsActive = vm.IsActive,
+                Title = vm.Title,
+                Description = vm.Description,
+                Price = vm.Price
+            };
+           
             ProductDTO temp = null;
             if (product.Id == Guid.Empty)
                 temp = await _tiaModel.AddProductAsync(product);
             else
                 temp = await _tiaModel.ChangeProductAsync(product);
-            
-            return PartialView("_ProductTableElementData", temp);
+
+            return PartialView("~/View/Catalog/_ProductTableElementData.cshtml", temp);
         }
 
         [HttpGet]

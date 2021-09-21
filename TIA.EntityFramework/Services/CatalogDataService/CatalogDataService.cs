@@ -25,7 +25,6 @@ namespace TIA.EntityFramework.Services
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
                     .FirstOrDefaultAsync(c => c.Id == guid);
-                await context.SaveChangesAsync();
 
                 return result.ConvertCatalog();
             }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NMeYjpE0vQW2FggEB2OfsAcpYzICIB6neqNNnylcsSxQAzyyvY4XiWc/AV1DrM9sUghFdlLJXHtFI/9Q9Cc0Fg==",
+  "dgSpecHash": "4minwC6ivG6GHmHYD0m2BYbqtyJIfm1UmJ0UKuQuOhYNLvxdJvXoZyaHrPFBBwhjDKJ6qCH1/u2JD8vuy40Mxw==",
   "success": true,
   "projectFilePath": "C:\\Users\\ivans\\source\\repos\\TIA\\TIA.EntityFramework\\TIA.EntityFramework.csproj",
   "expectedPackageFiles": [
@@ -35,7 +35,7 @@
     "C:\\Users\\ivans\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\ivans\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\ivans\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\ivans\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.collections.concurrent\\4.3.0\\system.collections.concurrent.4.3.0.nupkg.sha512",

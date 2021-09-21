@@ -1,4 +1,5 @@
-﻿@model CatalogDTO
+﻿@model ModalCatalogViewModel
+
 
 <div class="modal-content">
 
@@ -11,28 +12,29 @@
 
         <div class="modal-body form-horizontal">
 
-            <input asp-for="Id" id="Id" name="Id" type="hidden" class="form-control" />
-            <input asp-for="IsActive" id="IsActive" name="IsActive" type="hidden" class="form-control" />
+            <input asp-for="CatalogDTO.Id" type="hidden" class="form-control" />
+            <input asp-for="CatalogDTO.IsActive" type="hidden" class="form-control" />
 
             <div class="form-group row">
-                <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                <label asp-for="CatalogDTO.Title" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <input asp-for="Title" placeholder="Название каталога" class="form-control" />
+                    <input asp-for="CatalogDTO.Title" placeholder="Название каталога" class="form-control" />
+                    <span asp-validation-for="CatalogDTO.Title"></span>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+                <label asp-for="CatalogDTO.Description" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <textarea asp-for="Description" class="form-control" placeholder="Описание каталога"></textarea>
+                    <textarea asp-for="CatalogDTO.Description" class="form-control" placeholder="Описание каталога"></textarea>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="ParentCatalogId" class="col-sm-2 col-form-label"></label>
+                <label asp-for="CatalogDTO.ParentCatalogId" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <select asp-for="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
-                        @foreach (CatalogDTO catalogDTO in (List<CatalogDTO>)ViewBag.listCatalogs)
+                    <select asp-for="CatalogDTO.ParentCatalogId" placeholder="Родительский каталог" class="form-control">
+                        @foreach (CatalogDTO catalogDTO in Model.CatalogList)
                         {
                             <option value="@catalogDTO.Id">@catalogDTO.Title</option>
                         }
@@ -53,3 +55,5 @@
     </form>
 
 </div>
+
+

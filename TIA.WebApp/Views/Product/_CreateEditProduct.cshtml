@@ -12,40 +12,43 @@
 
         <div class="modal-body form-horizontal">
 
-            <input asp-for="ProductDTO.Id" id="Id" name="Id" type="hidden" class="form-control" />
-            <input asp-for="ProductDTO.IsActive" id="IsActive" name="IsActive" type="hidden" class="form-control" />
+            <input asp-for="Id" type="hidden" class="form-control" />
+            <input asp-for="IsActive" type="hidden" class="form-control" />
 
             <div class="form-group row">
-                <label asp-for="ProductDTO.Title" class="col-sm-2 col-form-label"></label>
+                <label asp-for="Title" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <input asp-for="ProductDTO.Title" id="Title" name="Title" placeholder="Название товара" class="form-control" />
+                    <input asp-for="Title" placeholder="Название товара" class="form-control" />
+                    <span asp-validation-for="Title"></span>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="ProductDTO.Description" class="col-sm-2 col-form-label"></label>
+                <label asp-for="Description" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <textarea asp-for="ProductDTO.Description" id="Description" name="Description" class="form-control" placeholder="Описание товара"></textarea>
+                    <textarea asp-for="Description" class="form-control" placeholder="Описание товара"></textarea>
+                    <span asp-validation-for="Description"></span>
                 </div>
             </div>
 
             <div class="form-group row">
-                <label asp-for="ProductDTO.Price" class="col-sm-2 col-form-label"></label>
+                <label asp-for="Price" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <textarea asp-for="ProductDTO.Price" id="Price" name="Price" class="form-control" placeholder="Цена товара"></textarea>
+                    <textarea asp-for="Price" class="form-control" placeholder="Цена товара"></textarea>
+                    <span asp-validation-for="Price"></span>
                 </div>
             </div>
 
             @if (Model.ActionType == TIA.WebApp.Extentions.ActionTypeEnum.Add)
             {
-                <input asp-for="ProductDTO.ParentCatalogId" id="ParentCatalogId" name="ParentCatalogId" type="hidden" class="form-control" />
+                <input asp-for="ParentCatalogId" type="hidden" class="form-control" />
             }
             else
             {
                 <div class="form-group row">
-                    <label asp-for="ProductDTO.ParentCatalogId" class="col-sm-2 col-form-label"></label>
+                    <label asp-for="ParentCatalogId" class="col-sm-2 col-form-label"></label>
                     <div class="col-sm-10">
-                        <select asp-for="ProductDTO.ParentCatalogId" id="ParentCatalogId" name="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
+                        <select asp-for="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
                             @foreach (CatalogDTO catalogDTO in Model.CatalogList)
                             {
                                 <option value="@catalogDTO.Id">@catalogDTO.Title</option>
@@ -58,7 +61,7 @@
 
 
         </div>
-      
+
         <div class="modal-footer">
             <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Отмена</button>
             <button class="btn btn-success relative" id="btnSubmit" type="submit">
@@ -70,5 +73,3 @@
     </form>
 
 </div>
-
-
