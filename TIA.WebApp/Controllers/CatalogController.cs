@@ -33,15 +33,21 @@ namespace TIA.WebApp.Controllers
             return View(catalogDTOs);
         }
 
-        [Route("Products/{id:Guid?}")]
-        public async Task<ActionResult<CatalogDTO>> Products(Guid? id)
+        [Route("Products/{id:Guid?}/{partialViewFlag?}")]
+        public async Task<ActionResult<CatalogDTO>> Products(Guid? id, bool partialViewFlag = false)
         {
             if (id != null && id != Guid.Empty)
             {
                 CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync((Guid)id);
 
                 if (catalogDTO != null)
-                    return View("CatalogProducts", catalogDTO);
+                {
+                    if (partialViewFlag)
+                        return PartialView("CatalogProducts", catalogDTO);
+                    else
+                        return View("CatalogProducts", catalogDTO);
+                }
+                    
             }
             return RedirectToPage("~/View/Shared/NotFoundPage");
         }

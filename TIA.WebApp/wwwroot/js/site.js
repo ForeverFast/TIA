@@ -4,34 +4,36 @@
 
 $.ajaxSetup({ cache: false });
 
-$('#DataPage').on('click', '.popupCreateEdit', function (e) {
-    modelPopupCreateEdit(this);
-});
+function addModalEvents() {
+    $('#DataPage').on('click', '.popupCreateEdit', function (e) {
+        modelPopupCreateEdit(this);
+    });
 
-$('#DataPage').on('click', '.popupDelete', function (e) {
-    modelPopupDelete(this);
-});
+    $('#DataPage').on('click', '.popupDelete', function (e) {
+        modelPopupDelete(this);
+    });
+}
+
+addModalEvents();
 
 function showModal(data) {
 
     $('#modal-view').find(".modal-dialog").html(data);
     $('#modal-view > .modal', data).modal("show");
-    $.validator.unobtrusive.parse('#modal-view');
 
-
-    $('#CreateEditProductForm').submit(function (e) {
+    $('#CreateEditProductForm').submit(function (e) { 
         e.preventDefault();
 
+        if (!$('#CreateEditProductForm').valid())
+            return;
+
         var formAction = $(this).attr("action");
-        var productForm = $('#CreateEditProductForm').get(0);
-        var actionType = productForm.dataset["actionType"];
-        var product = $(productForm).serializeObject();
-        var product2 = $(productForm).serialize();
+        var actionType = this.dataset["actionType"];
+        var product = $(this).serializeObject();
 
         $.post(formAction, { vm: product }).done(function (data) {
 
             if (actionType == "Add") {
-                debugger;
                 if (productForm.dataset["isEmptyCatalog"] == "True") {
                     $.ajax({
                         url: "/Catalog/GetEmptyTable",
@@ -46,17 +48,19 @@ function showModal(data) {
                 insertTableItem(data);
             }
             else {
-                $('#item-' + product["Id"]).get(0).remove();
-
+ 
                 var catalogId = $('#DataPage').get(0).dataset["catalogId"];
-                if (catalogId == product["ParentCatalogId"])
-                    insertTableItem(data);
+                if (catalogId == product["ParentCatalogId"]) {
+                    $('#item-' + product["Id"]).get(0).outerHTML = data;
+                }
+                    
             }
 
             $('#modal-view').modal("hide");
         }).fail(function (data) {
             // todo?
         });
+
     });
 
     $('#YesNoForm').submit(function (e) {
@@ -71,6 +75,8 @@ function showModal(data) {
             $('#modal-view').modal("hide");
         });
     });
+
+    $.validator.unobtrusive.parse('#modal-view');
 }
 
 function modelPopupCreateEdit(reff) {
@@ -162,17 +168,17 @@ $.fn.serializeObject = function () {
     return json;
 };
 
+$('a[name="ctlgBtn"]').click(function () {
+    var elem = this;
+    if ($("div").is("#DataPage")) {
 
+        $.get(elem.dataset["url"], { partialViewFlag: true }).done(function (data) {
+            $(".rightSide").html(data);
+            addModalEvents();
+        });
 
-
-
-
-//tr.id = 'product-' + data["id"];
-//tr.innerHTML =
-//    '<td>' + data["title"] + '</td>' +
-//    '<td>' + data["description"] + '</td>' +
-//    '<td>' + data["price"] + '</td>' +
-//    '<td><a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="' + data["id"] + '" data-parent-id="' + data["parentCatalogId"] +
-//    '"data-toggle="modal" data-target="#modal-view" id="Product-E">/</a></td>' +
-//    '<td><a class="btn btn-primary popupDelete" data-url="/Product/Delete" data-id="' + data["id"] +
-//    '"data-toggle="modal" data-target="#modal-view" id="Product-D">-</a></td>';
+    }
+    else {
+        $(location).attr('href', elem.dataset["url"]);
+    }
+});

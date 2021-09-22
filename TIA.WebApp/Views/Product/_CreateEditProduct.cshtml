@@ -10,6 +10,8 @@
     <form id="CreateEditProductForm" asp-action="CreateEdit" asp-controller="Product" method="post" enctype="multipart/form-data"
           data-action-type="@Model.ActionType.ToString()" data-is-empty-catalog="@Model.IsEmptyCatalog">
 
+
+
         <div class="modal-body form-horizontal">
 
             <input asp-for="Id" type="hidden" class="form-control" />

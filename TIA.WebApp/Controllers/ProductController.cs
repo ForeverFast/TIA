@@ -90,7 +90,7 @@ namespace TIA.WebApp.Controllers
             else
                 temp = await _tiaModel.ChangeProductAsync(product);
 
-            return PartialView("~/View/Catalog/_ProductTableElementData.cshtml", temp);
+            return PartialView("~/Views/Catalog/_ProductTableElementData.cshtml", temp);
         }
 
         [HttpGet]

@@ -5,9 +5,9 @@
     {
         <li id="item-@catalogDTO.Id">
             <span>
-                <a asp-controller="Catalog" asp-action="Products" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>
+                @*<a asp-controller="Catalog" asp-action="Products" asp-route-id="@catalogDTO.Id">@catalogDTO.Title</a>*@
+                <a data-url="@($"/Catalog/Products?id={catalogDTO.Id}")" data-id="@catalogDTO.Id" name="ctlgBtn">@catalogDTO.Title</a>
             </span>
-       
         </li>
 
         if (catalogDTO.Catalogs.Any())
