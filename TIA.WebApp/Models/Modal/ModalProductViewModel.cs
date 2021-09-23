@@ -18,17 +18,21 @@ namespace TIA.WebApp.Models
 
         public Guid Id { get; set; }
 
+        [Display(Name = "В каталоге")]
         public Guid? ParentCatalogId { get; set; }
 
+        [Display(Name = "Название")]
         [Required(ErrorMessage = "Не указано название.")]
         public string Title { get; set; }
 
+        [Display(Name = "Описание")]
         public string Description { get; set; }
 
         public bool IsActive { get; set; }
 
+        [Display(Name = "Цена")]
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Недопустимый возраст")]
+        [Range(1, int.MaxValue, ErrorMessage = "Недопустимое значение цены")]
         public uint Price { get; set; }
     }
 }

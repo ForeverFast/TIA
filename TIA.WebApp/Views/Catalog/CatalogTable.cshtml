@@ -5,7 +5,7 @@
     {
         <table>
             <tr><th>Название</th><th>Идентификатор</th><th>Родитель</th></tr>
-            @foreach (CatalogDTO catalogDTO in Model)
+            @foreach (CatalogDTO catalogDTO in Model)   
             {
                 <tr id="item-@catalogDTO.Id">
                     <td>@catalogDTO.Title</td>
@@ -21,19 +21,19 @@
 
                     <td>
                         <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="0" data-parent-id="@catalogDTO.Id"
-                           data-toggle="modal" data-target="#modal-view" id="Catalog-C">
+                           data-toggle="modal" data-target="#modal-view">
                             +
                         </a>
                     </td>
                     <td>
                         <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="@catalogDTO.Id" data-parent-id="@catalogDTO.ParentCatalogId"
-                           data-toggle="modal" data-target="#modal-view" id="Catalog-E">
+                           data-toggle="modal" data-target="#modal-view">
                             /
                         </a>
                     </td>
                     <td>
                         <a class="btn btn-primary popupDelete" data-url="/Catalog/Delete" data-id="@catalogDTO.Id"
-                           data-toggle="modal" data-target="#modal-view" id="Catalog-D">
+                           data-toggle="modal" data-target="#modal-view">
                             -
                         </a>
                     </td>
@@ -49,7 +49,7 @@
     }
     <div>
         <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="0" data-parent-id="0"
-           data-toggle="modal" data-target="#modal-view" id="Catalog-C">
+           data-toggle="modal" data-target="#modal-view">
             +
         </a>
     </div>
