@@ -24,6 +24,12 @@ namespace TIA.WebApp.Controllers
             _logger = logger;
         }
 
+        [Route("Index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [Route("CatalogTable")]
         public async Task<IActionResult> CatalogTable()
         {
@@ -32,8 +38,8 @@ namespace TIA.WebApp.Controllers
             return View(catalogDTOs);
         }
 
-        [Route("Products/{id:Guid?}/{partialViewFlag?}")]
-        public async Task<ActionResult<CatalogDTO>> Products(Guid? id, bool partialViewFlag = false)
+        [Route("Products/{id:Guid?}")]
+        public async Task<ActionResult<CatalogDTO>> Products(Guid? id)
         {
             if (id != null && id != Guid.Empty)
             {
@@ -41,21 +47,27 @@ namespace TIA.WebApp.Controllers
 
                 if (catalogDTO != null)
                 {
-                    if (partialViewFlag)
-                        return PartialView("CatalogProducts", catalogDTO);
-                    else
-                        return View("CatalogProducts", catalogDTO);
+                    return View("CatalogProducts", catalogDTO);
                 }
                     
             }
             return RedirectToPage("~/View/Shared/NotFoundPage");
         }
 
-        [HttpGet]
-        [Route("GetEmptyTable")]
-        public IActionResult GetEmptyTable()
+        [Route("TableData/{id:Guid?}")]
+        public async Task<ActionResult<CatalogDTO>> TableData(Guid? id)
         {
-            return PartialView("_TableView");
+            if (id != null && id != Guid.Empty)
+            {
+                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync((Guid)id);
+
+                if (catalogDTO != null)
+                {
+                    return PartialView("_TableView", catalogDTO);
+                }
+
+            }
+            return RedirectToPage("~/View/Shared/NotFoundPage");
         }
 
         [HttpGet]
@@ -92,11 +104,11 @@ namespace TIA.WebApp.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        [Route("CreateEdit")]
+        [Route("CreateEdit/{vm?}")]
         public async Task<ActionResult> CreateEdit(ModalCatalogViewModel vm)
         {
             if (!ModelState.IsValid)
-                return PartialView("_CreateEditCatalog", vm);
+                return BadRequest();
 
             CatalogDTO model = vm.CatalogDTO;
 
@@ -113,51 +125,20 @@ namespace TIA.WebApp.Controllers
             return RedirectToAction(nameof(this.Products), temp);
         }
 
-        [HttpGet]
-        [Route("Delete/{itemId?}")]
-        public IActionResult Delete(Guid id)
-        {
-            try
-            {
-                YesNoDialogViewModel vm = new YesNoDialogViewModel()
-                {
-                    ObjectDTO = new CatalogDTO { Id = id },
-                    Controller = "Catalog"
-                };
-                return PartialView("_YesNoDialog", vm);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(403);
-            }
-           
-        }
-
-
         [ValidateAntiForgeryToken]
         [HttpPost]
-        [Route("DeleteConfirm/{obj?}")]
-        public async Task<ActionResult> DeleteConfirm(CatalogDTO obj)
+        [Route("Delete/{id?}")]
+        public async Task<ActionResult> Delete(Guid id)
         {
-            try
-            {
-                obj = await _tiaModel.GetCatalogByIdAsync(obj.Id);
-                List<Guid> chCatalogs = DataExtentions.SelectRecursive(obj.Catalogs, c => c.Catalogs).Select(c => c.Id).ToList();
-                chCatalogs.Add(obj.Id);
-                bool result = await _tiaModel.DeleteCatalogAsync(obj);
+            bool result = await _tiaModel.DeleteCatalogAsync(id);
 
-                if (result)
-                {
-                    return Ok(chCatalogs);
-                }
-                else
-                {
-                    return StatusCode(409);
-                }
-            }
-            catch(Exception ex)
+            if (result)
             {
-                return StatusCode(500);
+                return Ok(id);
+            }
+            else
+            {
+                return StatusCode(409);
             }
         }
     }

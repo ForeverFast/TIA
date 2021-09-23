@@ -8,7 +8,7 @@
     </div>
 
     <form id="CreateEditProductForm" asp-action="CreateEdit" asp-controller="Product" method="post" enctype="multipart/form-data"
-          data-action-type="@Model.ActionType.ToString()" data-is-empty-catalog="@Model.IsEmptyCatalog">
+          data-is-empty-catalog="@Model.IsEmptyCatalog">
 
         <div class="modal-body form-horizontal">
 
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            @if (Model.ActionType == TIA.WebApp.Extentions.ActionTypeEnum.Add)
+            @if (Model.Id == Guid.Empty)
             {
                 <input asp-for="ParentCatalogId" type="hidden" class="form-control" />
             }

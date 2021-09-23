@@ -25,8 +25,8 @@ namespace TIA.Core.Converters
                 ParentCatalogId = catalogDTO.ParentCatalogId,
                 Title = catalogDTO.Title,
                 Description = catalogDTO.Description,
-                Products = catalogDTO.Products?.Select(p => p.ConvertProductDTO()),
-                Catalogs = catalogDTO.Catalogs?.Select(p => p.ConvertCatalogDTO()),
+                Products = catalogDTO.Products?.Select(p => p.ConvertProductDTO()).ToList(),
+                Catalogs = catalogDTO.Catalogs?.Select(p => p.ConvertCatalogDTO()).ToList(),
                 IsActive = catalogDTO.IsActive
             };
     }

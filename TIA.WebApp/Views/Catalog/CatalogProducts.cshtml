@@ -1,35 +1,16 @@
 ﻿@model CatalogDTO
 @{
     ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_CatalogLayout.cshtml";
 }
 
-<div id="DataPage" data-catalog-id="@Model.Id">
-    @if (Model?.Products != null && Model?.Products.Count() > 0)
-    {
-        <div id="ProductsData">
-            @await Html.PartialAsync("_TableView", Model.Products)
-        </div>
-    }
-    else
-    {
-        <div id="ProductsData">
+<div id="DataPage">
 
-        </div>
-        <div id="NoElementsData">
-            <h1>Товаров нет((</h1>
-            <h2>Наполни меня (͡° ͜ʖ ͡°)</h2>
-        </div>
-    }
-
-    <div>
-        <a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="0" data-parent-id="@Model.Id"
-           data-toggle="modal" data-target="#modal-view">
-            +
-        </a>
+    <div id="DataPlace">
+        @await Html.PartialAsync("_TableView", Model)
     </div>
-</div>
 
-@*@section Scripts{
-    
-}*@
+    @await Html.PartialAsync("_YesNoDialog", "Product");
+
+</div>
 

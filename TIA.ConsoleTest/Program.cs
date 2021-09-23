@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using TIA.BusinessLogic;
 using TIA.Core.EfEntities;
 using TIA.EntityFramework;
+using TIA.EntityFramework.Services;
 
 namespace TIA.ConsoleTest
 {
@@ -10,9 +13,27 @@ namespace TIA.ConsoleTest
     {
         static void Main(string[] args)
         {
-            using (TIADbContext context = new TIADbContextFactory().CreateDbContext(null))
-            {
-                Catalog catalog = context.Catalogs.ToArray()[0];
+            Thh();
+
+            Console.ReadKey();
+        }
+
+        static async void Thh()
+        {
+            TiaModel m = new TiaModel(new CatalogDataService(), new ProductDataService());
+            var res1 = await m.GetCatalogByIdAsync(Guid.Parse("01775f27-7949-4259-4aa7-08d9777996d4"));
+            var t = Task.CurrentId;
+            var res2 = await m.GetCatalogsTreeAsync();
+
+           
+        }
+
+    }
+}
+
+
+/*
+Catalog catalog = context.Catalogs.ToArray()[0];
 
                 Product product = new Product
                 {
@@ -60,14 +81,8 @@ namespace TIA.ConsoleTest
 
                 context.Products.AddRange(product4, product5);
 
-                context.SaveChanges();
-            }
-        }
-    }
-}
+                context.SaveChanges(); 
 
-
-/*
  Catalog catalog = new Catalog { Title = "test1" };
                 Catalog catalog2 = new Catalog { Title = "test2" };
                 Catalog catalog3 = new Catalog { Title = "test3" };

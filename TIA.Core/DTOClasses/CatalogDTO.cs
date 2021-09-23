@@ -4,8 +4,8 @@ namespace TIA.Core.DTOClasses
 {
     public record CatalogDTO : CatalogObjectDTO
     {
-        public IEnumerable<CatalogDTO> Catalogs { get; init; }
+        public List<CatalogDTO> Catalogs { get; init; }
 
-        public IEnumerable<ProductDTO> Products { get; init; }
+        public List<ProductDTO> Products { get; init; }
     }
 }

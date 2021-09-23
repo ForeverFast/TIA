@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TIA.Core.DTOClasses;
-using TIA.WebApp.Extentions;
 
 namespace TIA.WebApp.Models
 {
     public class ModalProductViewModel
     {
-        public ActionTypeEnum ActionType { get; set; }
-
         public List<CatalogDTO> CatalogList { get; set; }
 
         public bool IsEmptyCatalog { get; set; }

@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using TIA.Core.Converters;
 using TIA.Core.DTOClasses;
@@ -22,7 +19,6 @@ namespace TIA.EntityFramework.Services
             {
                 Product result = await context.Products
                     .FirstOrDefaultAsync(c => c.Id == guid);
-                await context.SaveChangesAsync();
 
                 return result.ConvertProduct();
             }

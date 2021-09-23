@@ -1,14 +1,10 @@
-﻿@model YesNoDialogViewModel
-<div class="modal-content">
+﻿@model string
+<div class="modal-content" id="YesNoFormDiv">
    
-    <form  id="YesNoForm" asp-controller="@Model.Controller" asp-action="DeleteConfirm" method="post" enctype="multipart/form-data">
+    <form id="YesNoForm" asp-controller="@Model" asp-action="Delete" method="post" enctype="multipart/form-data">
 
         <div class="modal-header">
             <h4 class="modal-title">Подтверждение действия</h4>
-        </div>
-
-        <div class="modal-body">
-            <input asp-for="ObjectDTO.Id" id="Id" name="Id" type="hidden" class="form-control" />
         </div>
 
         <div class="modal-footer">

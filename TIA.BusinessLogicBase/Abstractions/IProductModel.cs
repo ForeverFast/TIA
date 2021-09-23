@@ -12,8 +12,8 @@ namespace TIA.BusinessLogicBase.Abstractions
 
         Task<ProductDTO> ChangeProductAsync(ProductDTO productDTO);
 
-        Task<bool> DeleteProductAsync(ProductDTO productDTO);
+        Task<bool> DeleteProductAsync(Guid id);
 
-        Task<bool> SafeDeleteProductAsync(ProductDTO productDTO);
+        Task<bool> SafeDeleteProductAsync(Guid id);
     }
 }

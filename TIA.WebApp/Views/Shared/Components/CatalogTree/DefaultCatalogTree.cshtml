@@ -1,6 +1,6 @@
-﻿@model IEnumerable<CatalogDTO>
+﻿@model List<CatalogDTO>
 
 @if (Model.Any())
     @await Html.PartialAsync("~/Views/Shared/Components/CatalogTree/_TreeNode.cshtml", Model)
 
-<a class="btn btn-primary popup" asp-controller="Catalog" asp-action="CatalogTable" >Открыть таблицу каталогов</a>
+

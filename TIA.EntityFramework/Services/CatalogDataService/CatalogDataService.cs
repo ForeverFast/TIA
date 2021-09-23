@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using TIA.Core.Converters;
 using TIA.Core.DTOClasses;
@@ -20,32 +19,34 @@ namespace TIA.EntityFramework.Services
         public virtual async Task<CatalogDTO> GetById(Guid guid)
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
-            {              
+            {
                 Catalog result = await context.Catalogs
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
-                    .FirstOrDefaultAsync(c => c.Id == guid);
+                    .FirstOrDefaultAsync(c => c.Id == guid && c.IsActive == true);
 
                 return result.ConvertCatalog();
             }
         }
 
-        public virtual async Task<IEnumerable<CatalogDTO>> GetCatalogsTree()
+        public virtual async Task<List<CatalogDTO>> GetCatalogsTree()
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
                 List<Catalog> result = await Task.FromResult(context.Catalogs
                     .Where(c => c.IsActive == true)
-                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
+                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .Include(c => c.ParentCatalog)
                     .ToList());
                 
-                return result.Where(c => c.ParentCatalogId == null).Select(c => c.ConvertCatalog());
+                return result.Where(c => c.ParentCatalogId == null)
+                    .Select(c => c.ConvertCatalog())
+                    .ToList();
             }
         }
 
-        public virtual async Task<IEnumerable<CatalogDTO>> GetCatalogsLineCollection()
+        public virtual async Task<List<CatalogDTO>> GetCatalogsLineCollection()
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
@@ -56,7 +57,8 @@ namespace TIA.EntityFramework.Services
                     .Include(c => c.ParentCatalog)
                     .ToList());
                
-                return result.Select(c => c.ConvertCatalog());
+                return result.Select(c => c.ConvertCatalog())
+                    .ToList();
             }
         }
 
@@ -99,11 +101,7 @@ namespace TIA.EntityFramework.Services
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
                 Catalog catalog = await context.Catalogs
-                    .Include(c => c.Catalogs)
-                    .Include(c => c.Products)
                     .FirstOrDefaultAsync(x => x.Id == guid);
-
-                HideAllData(catalog, context);
 
                 catalog.IsActive = false;
                 await context.SaveChangesAsync();
@@ -111,49 +109,6 @@ namespace TIA.EntityFramework.Services
                 return true;
             }
         }
-
-        #region Вспомогательные методы
-
-        /// <summary>
-        /// Рекурсивно помечает видимость всех данных "False" 
-        /// </summary>
-        /// <param name="catalog"> Скрываемый каталог </param>
-        /// <param name="context"> Контекст БД</param>
-        private void HideAllData(Catalog catalog, TIADbContext context)
-        {
-            catalog = context.Catalogs
-                .Include(f => f.Catalogs)
-                .Include(f => f.Products)
-                .FirstOrDefault(f => f.Id == catalog.Id);
-
-            foreach (var item in catalog.Catalogs)
-            {
-                HideAllData(item, context);
-            }
-
-            foreach (var meme in catalog.Products)
-            {
-                var memeEntity = context.Products.FirstOrDefault(x => x.Id == meme.Id);
-                if (memeEntity != null)
-                {
-                    memeEntity.IsActive = false;
-                }
-            }
-            
-            context.SaveChanges();
-            foreach (var folder1 in catalog.Catalogs)
-            {
-                var folderEntity = context.Catalogs.FirstOrDefault(x => x.Id == folder1.Id);
-                if (folderEntity != null)
-                {
-                    folderEntity.IsActive = false;
-
-                }
-            }
-            context.SaveChanges();
-        }
-
-        #endregion
 
         #region Конструкторы
 
@@ -170,3 +125,46 @@ namespace TIA.EntityFramework.Services
         #endregion
     }
 }
+
+//#region Вспомогательные методы
+
+///// <summary>
+///// Рекурсивно помечает видимость всех данных "False" 
+///// </summary>
+///// <param name="catalog"> Скрываемый каталог </param>
+///// <param name="context"> Контекст БД</param>
+//private void HideAllData(Catalog catalog, TIADbContext context)
+//{
+//    catalog = context.Catalogs
+//        .Include(f => f.Catalogs)
+//        .Include(f => f.Products)
+//        .FirstOrDefault(f => f.Id == catalog.Id);
+
+//    foreach (var item in catalog.Catalogs)
+//    {
+//        HideAllData(item, context);
+//    }
+
+//    foreach (var meme in catalog.Products)
+//    {
+//        var memeEntity = context.Products.FirstOrDefault(x => x.Id == meme.Id);
+//        if (memeEntity != null)
+//        {
+//            memeEntity.IsActive = false;
+//        }
+//    }
+
+//    context.SaveChanges();
+//    foreach (var folder1 in catalog.Catalogs)
+//    {
+//        var folderEntity = context.Catalogs.FirstOrDefault(x => x.Id == folder1.Id);
+//        if (folderEntity != null)
+//        {
+//            folderEntity.IsActive = false;
+
+//        }
+//    }
+//    context.SaveChanges();
+//}
+
+//#endregion

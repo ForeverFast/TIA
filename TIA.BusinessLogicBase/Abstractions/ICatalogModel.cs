@@ -17,6 +17,6 @@ namespace TIA.BusinessLogicBase.Abstractions
 
         Task<CatalogDTO> ChangeCatalogAsync(CatalogDTO catalogDTO);
 
-        Task<bool> DeleteCatalogAsync(CatalogDTO catalogDTO);
+        Task<bool> DeleteCatalogAsync(Guid id);
     }
 }

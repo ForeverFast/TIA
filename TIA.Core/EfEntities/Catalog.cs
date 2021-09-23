@@ -6,9 +6,9 @@ namespace TIA.Core.EfEntities
     [Table("Catalogs")]
     public class Catalog : CatalogObject
     {
-        public IEnumerable<Catalog> Catalogs { get; set; }
+        public List<Catalog> Catalogs { get; set; }
 
-        public IEnumerable<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
 
         public Catalog()
         {

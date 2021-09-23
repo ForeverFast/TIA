@@ -1,0 +1,16 @@
+﻿@{ 
+    ViewBag.Title = "Catalogs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="mainDiv">
+    <div class="leftSide">
+        <vc:catalog-tree />
+    </div>
+
+    <div class="rightSide">
+        @RenderBody()
+    </div>
+</div>
+

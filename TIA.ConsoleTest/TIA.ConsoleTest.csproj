@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TIA.BusinessLogic\TIA.BusinessLogic.csproj" />
     <ProjectReference Include="..\TIA.EntityFramework\TIA.EntityFramework.csproj" />
   </ItemGroup>
 

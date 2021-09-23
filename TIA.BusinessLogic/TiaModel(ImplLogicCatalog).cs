@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using TIA.BusinessLogicBase;
 using TIA.Core.DTOClasses;
 
@@ -8,34 +8,34 @@ namespace TIA.BusinessLogic
 {
     public partial class TiaModel : TiaModelBase
     {
-        protected override CatalogDTO GetCatalogById(Guid id)
+        protected override async Task<CatalogDTO> GetCatalogByIdExecute(Guid id)
         {
-            CatalogDTO catalogDTO = catalogDataService.GetById(id).Result;
-            return catalogDTO;
+            CatalogDTO catalog = await catalogDataService.GetById(id);
+            return catalog;
         }
 
-        protected override List<CatalogDTO> GetCatalogsTree()
+        protected override async Task<List<CatalogDTO>> GetCatalogsTreeExecute()
         {
-            List<CatalogDTO> tree = catalogDataService.GetCatalogsTree().Result.ToList();
+            List<CatalogDTO> tree = await catalogDataService.GetCatalogsTree();
             return tree;
         }
 
-        protected override List<CatalogDTO> GetCatalogsLineCollection()
+        protected override async Task<List<CatalogDTO>> GetCatalogsLineCollectionExecute()
         {
-            List<CatalogDTO> tree = catalogDataService.GetCatalogsLineCollection().Result.ToList();
+            List<CatalogDTO> tree = await catalogDataService.GetCatalogsLineCollection();
             return tree;
         }
 
-        protected override CatalogDTO AddCatalog(CatalogDTO catalogDTO)
+        protected override async Task<CatalogDTO> AddCatalogExecute(CatalogDTO catalogDTO)
         {
             if (string.IsNullOrEmpty(catalogDTO.Title))
                 throw new ArgumentNullException(nameof(catalogDTO.Title), "У каталога должно быть название.");
 
-            CatalogDTO dbCreatedCatalog = catalogDataService.Add(catalogDTO).Result;
+            CatalogDTO dbCreatedCatalog = await catalogDataService.Add(catalogDTO);
             return dbCreatedCatalog;
         }
 
-        protected override CatalogDTO ChangeCatalog(CatalogDTO catalogDTO)
+        protected override async Task<CatalogDTO> ChangeCatalogExecute(CatalogDTO catalogDTO)
         {
             if (catalogDTO.Id == Guid.Empty)
                 throw new ArgumentNullException(nameof(catalogDTO.Id), "Для изменение каталога нужен его Id.");
@@ -43,16 +43,20 @@ namespace TIA.BusinessLogic
             if (string.IsNullOrEmpty(catalogDTO.Title))
                 throw new ArgumentNullException(nameof(catalogDTO.Title), "У каталога должно быть название.");
 
-            CatalogDTO dbChangedCatalog = catalogDataService.Update(catalogDTO, catalogDTO.Id).Result;
+            CatalogDTO dbChangedCatalog = await catalogDataService.Update(catalogDTO, catalogDTO.Id);
             return dbChangedCatalog;
         }
 
-        protected override bool DeleteCatalog(CatalogDTO catalogDTO)
+        protected override async Task<bool> DeleteCatalogExecute(Guid id)
         {
-            if (catalogDTO.Id == Guid.Empty)
-                throw new ArgumentNullException(nameof(catalogDTO.Id), "Для скрытия каталога нужен его Id.");
+            if (id == Guid.Empty)
+                throw new ArgumentNullException(nameof(id), "Для скрытия каталога нужен его Id.");
 
-            bool operationResult = catalogDataService.Delete(catalogDTO.Id).Result;
+            CatalogDTO catalog = await catalogDataService.GetById(id);
+            if (catalog.Products.Count > 0 || catalog.Catalogs.Count > 0)
+                return false;
+
+            bool operationResult = await catalogDataService.Delete(id);
             return operationResult;
         }     
     }

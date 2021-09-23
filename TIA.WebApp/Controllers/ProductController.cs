@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using TIA.BusinessLogicBase.Abstractions;
 using TIA.Core.DTOClasses;
-using TIA.WebApp.Extentions;
 using TIA.WebApp.Models;
 
 namespace TIA.WebApp.Controllers
@@ -47,15 +46,13 @@ namespace TIA.WebApp.Controllers
             if (itemId != null && itemId != Guid.Empty)
             {
                 model = await _tiaModel.GetProductByIdAsync((Guid)itemId);
-                vm.ActionType = ActionTypeEnum.Update;
             }
             else
             {
                 model = model with { ParentCatalogId = parentId };
-                vm.ActionType = ActionTypeEnum.Add;
             }
-
-            vm.IsEmptyCatalog = (await _tiaModel.GetCatalogByIdAsync((Guid)parentId))?.Products.Count() == 0 ? true : false;
+            CatalogDTO prCtlg = await _tiaModel.GetCatalogByIdAsync((Guid)parentId);
+            vm.IsEmptyCatalog = prCtlg?.Products.Count() == 0 ? true : false;
             vm.Id = model.Id;
             vm.ParentCatalogId = model.ParentCatalogId;
             vm.IsActive = model.IsActive;
@@ -83,7 +80,7 @@ namespace TIA.WebApp.Controllers
                 Description = vm.Description,
                 Price = vm.Price
             };
-           
+
             ProductDTO temp = null;
             if (product.Id == Guid.Empty)
                 temp = await _tiaModel.AddProductAsync(product);
@@ -93,47 +90,20 @@ namespace TIA.WebApp.Controllers
             return PartialView("~/Views/Catalog/_ProductTableElementData.cshtml", temp);
         }
 
-        [HttpGet]
-        [Route("Delete/{itemId?}")]
-        public IActionResult Delete(Guid id)
-        {
-            try
-            {
-                YesNoDialogViewModel vm = new YesNoDialogViewModel()
-                {
-                    ObjectDTO = new ProductDTO { Id = id },
-                    Controller = "Product"
-                };
-                return PartialView("_YesNoDialog", vm);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(403);
-            }
-
-        }
-
         [ValidateAntiForgeryToken]
         [HttpPost]
-        [Route("DeleteConfirm/{obj?}")]
-        public async Task<ActionResult> DeleteConfirm(ProductDTO obj)
+        [Route("Delete/{id?}")]
+        public async Task<ActionResult> DeleteConfirm(Guid id)
         {
-            try
-            {
-                bool result = await _tiaModel.DeleteProductAsync(obj);
+            bool result = await _tiaModel.DeleteProductAsync(id);
 
-                if (result)
-                {
-                    return Ok(new List<Guid> { obj.Id });
-                }
-                else
-                {
-                    return StatusCode(409);
-                }
-            }
-            catch (Exception ex)
+            if (result)
             {
-                return StatusCode(500);
+                return Ok(new List<Guid> { id });
+            }
+            else
+            {
+                return StatusCode(409);
             }
         }
     }
