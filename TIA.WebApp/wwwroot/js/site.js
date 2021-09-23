@@ -30,8 +30,9 @@ function showModal(data) {
         var formAction = $(this).attr("action");
         var actionType = this.dataset["actionType"];
         var product = $(this).serializeObject();
+        var token = $('input[name="__RequestVerificationToken"]', this).val();
 
-        $.post(formAction, { vm: product }).done(function (data) {
+        $.post(formAction, { vm: product, __RequestVerificationToken: token }).done(function (data) {
 
             if (actionType == "Add") {
                 if (productForm.dataset["isEmptyCatalog"] == "True") {
@@ -67,10 +68,19 @@ function showModal(data) {
         e.preventDefault();
 
         var formAction = $(this).attr("action");
-        var ynForm = $('#YesNoForm').get(0);
-        var objectDTO = $(ynForm).serializeObject();
-        $.post(formAction, { obj: objectDTO }).done(function (data) {
-            $('#item-' + data).get(0).remove();
+        var objectDTO = $(this).serializeObject();
+        var token = $('input[name="__RequestVerificationToken"]', this).val();
+
+        $.post(formAction, { obj: objectDTO, __RequestVerificationToken: token }).done(function (data) {
+            $(data).each(function (index) {
+                try {
+                    $('#item-' + this).get(0).remove();
+                    $('#treeNode-' + this).get(0).remove();
+                }
+                catch (e) {
+
+                }
+            });
 
             $('#modal-view').modal("hide");
         });

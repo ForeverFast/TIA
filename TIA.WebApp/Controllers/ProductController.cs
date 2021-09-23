@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +24,8 @@ namespace TIA.WebApp.Controllers
             _logger = logger;
         }
 
-        [Route("GetById/{id:Guid?}")]
-        public async Task<ActionResult<ProductDTO>> GetById(Guid id)
+        [Route("ProductDetailPage/{id:Guid?}")]
+        public async Task<ActionResult<ProductDTO>> ProductDetailPage(Guid id)
         {
             ProductDTO productDTO = await _tiaModel.GetProductByIdAsync(id);
 
@@ -67,6 +66,7 @@ namespace TIA.WebApp.Controllers
             return PartialView("_CreateEditProduct", vm);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("CreateEdit/{vm?}")]
         public async Task<ActionResult> CreateEdit(ModalProductViewModel vm)
@@ -113,6 +113,7 @@ namespace TIA.WebApp.Controllers
 
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("DeleteConfirm/{obj?}")]
         public async Task<ActionResult> DeleteConfirm(ProductDTO obj)
@@ -123,7 +124,7 @@ namespace TIA.WebApp.Controllers
 
                 if (result)
                 {
-                    return Ok(obj.Id);
+                    return Ok(new List<Guid> { obj.Id });
                 }
                 else
                 {

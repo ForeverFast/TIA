@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -91,6 +90,7 @@ namespace TIA.WebApp.Controllers
             return PartialView("_CreateEditCatalog", vm);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("CreateEdit")]
         public async Task<ActionResult> CreateEdit(ModalCatalogViewModel vm)
@@ -113,7 +113,6 @@ namespace TIA.WebApp.Controllers
             return RedirectToAction(nameof(this.Products), temp);
         }
 
-
         [HttpGet]
         [Route("Delete/{itemId?}")]
         public IActionResult Delete(Guid id)
@@ -134,17 +133,22 @@ namespace TIA.WebApp.Controllers
            
         }
 
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("DeleteConfirm/{obj?}")]
         public async Task<ActionResult> DeleteConfirm(CatalogDTO obj)
         {
             try
             {
+                obj = await _tiaModel.GetCatalogByIdAsync(obj.Id);
+                List<Guid> chCatalogs = DataExtentions.SelectRecursive(obj.Catalogs, c => c.Catalogs).Select(c => c.Id).ToList();
+                chCatalogs.Add(obj.Id);
                 bool result = await _tiaModel.DeleteCatalogAsync(obj);
 
                 if (result)
                 {
-                    return Ok(obj.Id);
+                    return Ok(chCatalogs);
                 }
                 else
                 {
