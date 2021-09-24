@@ -99,7 +99,7 @@ namespace TIA.WebApp.Controllers
 
             if (result)
             {
-                return Ok(new List<Guid> { id });
+                return Ok(id);
             }
             else
             {

@@ -4,6 +4,7 @@
     <td>@Model.Title</td>
     <td>@Model.Description</td>
     <td>@Model.Price</td>
+    <td>@Model.SomeDate.GetValueOrDefault().ToShortDateString()</td>
     <td>
         <a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="@Model.Id" data-parent-id="@Model.ParentCatalogId"
            data-toggle="modal" data-target="#modal-view">

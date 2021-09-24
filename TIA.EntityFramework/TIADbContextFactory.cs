@@ -15,6 +15,9 @@ namespace TIA.EntityFramework
             return new TIADbContext(options.Options);
         }
 
-
+        public TIADbContext CreateDbContext()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

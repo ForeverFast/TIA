@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -38,31 +39,57 @@ namespace TIA.WebApp.Controllers
             return View(catalogDTOs);
         }
 
-        [Route("Products/{id:Guid?}")]
-        public async Task<ActionResult<CatalogDTO>> Products(Guid? id)
+        [Route("Products/{id:Guid?}/{minDate?}/{maxDate?}/{minPrice?}/{maxPrice?}")]
+        public async Task<ActionResult<CatalogDTO>> Products(Guid? id, string title, DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
         {
             if (id != null && id != Guid.Empty)
             {
-                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync((Guid)id);
+                Guid nId = (Guid)id;
+
+                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync(nId);
 
                 if (catalogDTO != null)
                 {
+                    List<ProductDTO> products = null;
+                    if (minDate != null || maxDate != null ||
+                        minPrice != null || maxPrice != null || !string.IsNullOrEmpty(title))
+                    {
+                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
+                    }
+                    else
+                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId);
+
+                    catalogDTO = catalogDTO with { Products = products };
+
                     return View("CatalogProducts", catalogDTO);
                 }
-                    
+
             }
             return RedirectToPage("~/View/Shared/NotFoundPage");
         }
 
-        [Route("TableData/{id:Guid?}")]
-        public async Task<ActionResult<CatalogDTO>> TableData(Guid? id)
+        [Route("TableData/{id:Guid?}/{minDate?}/{maxDate?}/{minPrice?}/{maxPrice?}")]
+        public async Task<ActionResult<CatalogDTO>> TableData(Guid? id, string title, DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
         {
             if (id != null && id != Guid.Empty)
             {
-                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync((Guid)id);
+                Guid nId = (Guid)id;
+
+                CatalogDTO catalogDTO = await _tiaModel.GetCatalogByIdAsync(nId);
 
                 if (catalogDTO != null)
                 {
+                    List<ProductDTO> products = null;
+                    if (minDate != null || maxDate != null ||
+                        minPrice != null || maxPrice != null || !string.IsNullOrEmpty(title))
+                    {
+                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
+                    }
+                    else
+                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId);
+
+                    catalogDTO = catalogDTO with { Products = products };
+
                     return PartialView("_TableView", catalogDTO);
                 }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TIA.Core.DTOClasses;
 
@@ -6,8 +7,10 @@ namespace TIA.EntityFramework.Services
 {
     public interface ICatalogDataService : IDataService<CatalogDTO>
     {
-        Task<List<CatalogDTO>> GetCatalogsTree();
+        List<ProductDTO> GetCatalogProductsWithFilters(Guid id, string title = "", DateTime? minDate = null, DateTime? maxDate = null, uint? minPrice = null, uint? maxPrice = null);
 
-        Task<List<CatalogDTO>> GetCatalogsLineCollection();
+        List<CatalogDTO> GetCatalogsTree();
+
+        List<CatalogDTO> GetCatalogsLineCollection();
     }
 }

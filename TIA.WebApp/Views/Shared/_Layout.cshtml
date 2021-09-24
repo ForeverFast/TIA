@@ -21,15 +21,36 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                         </li>
-                    </ul>
-                </div>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Catalog" asp-action="Index">Каталоги</a>
                         </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item ml-md-auto">
+
+                                <div class="nav-item row">
+                                    <p class="col-8 text-dark">@User.Identity.Name</p>
+                                    <form class="col-4" method="post" asp-controller="Account" asp-action="Logout">
+                                        <input class="nav-item text-dark" type="submit" value="Выход" />
+                                    </form>
+                                </div>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ml-md-auto">
+                                <div class="row">
+                                    <a class="nav-link col-6 text-dark" asp-area="" asp-controller="Account" asp-action="Login">Вход</a>
+                                    <a class="nav-link col-6 text-dark" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
+                                 </div>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

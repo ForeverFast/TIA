@@ -13,16 +13,22 @@ namespace TIA.BusinessLogic
             CatalogDTO catalog = await catalogDataService.GetById(id);
             return catalog;
         }
-
-        protected override async Task<List<CatalogDTO>> GetCatalogsTreeExecute()
+         
+        protected override List<ProductDTO> GetCatalogProductsWithFiltersExecute(Guid id, string title, DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
         {
-            List<CatalogDTO> tree = await catalogDataService.GetCatalogsTree();
+            List<ProductDTO> products = catalogDataService.GetCatalogProductsWithFilters(id, title, minDate, maxDate, minPrice, maxPrice);
+            return products;
+        }
+
+        protected override List<CatalogDTO> GetCatalogsTreeExecute()
+        {
+            List<CatalogDTO> tree = catalogDataService.GetCatalogsTree();
             return tree;
         }
 
-        protected override async Task<List<CatalogDTO>> GetCatalogsLineCollectionExecute()
+        protected override List<CatalogDTO> GetCatalogsLineCollectionExecute()
         {
-            List<CatalogDTO> tree = await catalogDataService.GetCatalogsLineCollection();
+            List<CatalogDTO> tree = catalogDataService.GetCatalogsLineCollection();
             return tree;
         }
 

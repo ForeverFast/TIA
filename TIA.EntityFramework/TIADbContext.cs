@@ -1,21 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TIA.Core.EfEntities;
 
 namespace TIA.EntityFramework
 {
-    public class TIADbContext : DbContext
+    public class TIADbContext : IdentityDbContext<User>
     {
         public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<Product> Products { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public TIADbContext(DbContextOptions<TIADbContext> options)
+          : base(options)
         {
-            
-        }
-
-        public TIADbContext(DbContextOptions options) : base(options)
-        {
-
         }
     }
 }

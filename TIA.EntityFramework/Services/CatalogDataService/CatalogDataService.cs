@@ -22,43 +22,70 @@ namespace TIA.EntityFramework.Services
             {
                 Catalog result = await context.Catalogs
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
-                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
                     .FirstOrDefaultAsync(c => c.Id == guid && c.IsActive == true);
 
                 return result.ConvertCatalog();
             }
         }
 
-        public virtual async Task<List<CatalogDTO>> GetCatalogsTree()
+        public virtual List<ProductDTO> GetCatalogProductsWithFilters(Guid id, string title, DateTime? minDate = null, DateTime? maxDate = null, uint? minPrice = null, uint? maxPrice = null)
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
-                List<Catalog> result = await Task.FromResult(context.Catalogs
-                    .Where(c => c.IsActive == true)
-                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
-                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
-                    .Include(c => c.ParentCatalog)
-                    .ToList());
-                
-                return result.Where(c => c.ParentCatalogId == null)
-                    .Select(c => c.ConvertCatalog())
+                IQueryable<Product> result = context.Products
+                    .Where(p => p.ParentCatalogId == id)
+                    .Where(p => p.IsActive == true);
+
+                if (!string.IsNullOrEmpty(title))
+                    result = result.Where(p => p.Title.Contains(title));
+
+                if (minDate != null)
+                    result = result.Where(p => p.SomeDate > minDate);
+
+                if (maxDate != null)
+                    result = result.Where(p => p.SomeDate < maxDate);
+
+                if (minPrice != null)
+                    result = result.Where(p => p.Price > minPrice);
+
+                if (maxPrice != null)
+                    result = result.Where(p => p.Price < maxPrice);
+
+                return result.Select(p => p.ConvertProduct())
                     .ToList();
             }
         }
 
-        public virtual async Task<List<CatalogDTO>> GetCatalogsLineCollection()
+        public virtual List<CatalogDTO> GetCatalogsTree()
         {
             using (TIADbContext context = _contextFactory.CreateDbContext(null))
             {
-                List<Catalog> result = await Task.FromResult(context.Catalogs
+                List<CatalogDTO> result = context.Catalogs
                     .Where(c => c.IsActive == true)
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
-                    .IncludeFilter(c => c.Products.Where(c => c.IsActive == true))
                     .Include(c => c.ParentCatalog)
-                    .ToList());
-               
-                return result.Select(c => c.ConvertCatalog())
+                    .AsEnumerable()
+                    .Select(c=>c.ConvertCatalog())
                     .ToList();
+
+                return result;
+            }
+        }
+
+        public virtual List<CatalogDTO> GetCatalogsLineCollection()
+        {
+            using (TIADbContext context = _contextFactory.CreateDbContext(null))
+            {
+                List<CatalogDTO> result = context.Catalogs
+                    .Where(c => c.IsActive == true)
+                    .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
+                    .Include(c => c.ParentCatalog)
+                    .AsEnumerable()
+                    .Select(c => c.ConvertCatalog())
+                    .ToList();
+
+                return result;
+                    
             }
         }
 

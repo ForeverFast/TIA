@@ -30,6 +30,9 @@ namespace TIA.EntityFramework.Services
             {
                 Product product = entity.ConvertProductDTO();
 
+                if (product.SomeDate == null)
+                    product.SomeDate = DateTime.Now;
+
                 EntityEntry<Product> createdResult = await context.Products.AddAsync(product);
                 await context.SaveChangesAsync();
 

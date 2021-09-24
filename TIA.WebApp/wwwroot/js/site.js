@@ -11,7 +11,33 @@ function showModal(data) {
     $('#modal-view > .modal', data).modal("show");
 }
 
+function doFilter(form, id) {
+    if (!$('#FilterForm').valid())
+        return;
+
+    var formAction = $(form).attr("action");
+    var filterData = $(form).serializeObject();
+    var token = $('input[name="__RequestVerificationToken"]', this).val();
+
+    $.get(formAction,
+        {
+            id: id,
+            title: filterData["title"],
+            minPrice: filterData["minPrice"],
+            maxPrice: filterData["maxPrice"],
+            minDate: filterData["minDate"],
+            maxDate: filterData["maxDate"],
+            __RequestVerificationToken: token
+        }).done(function (table) {
+
+            $("#DataPlace").html(table);
+        }).fail(function (data) {
+
+        });
+}
+
 function addModalEvents() {
+
     $('#DataPage').on('click', '.popupCreateEdit', function (e) {
         var url = $(this).data('url');
 
@@ -102,8 +128,15 @@ function addModalEvents() {
         $.validator.unobtrusive.parse('#modal-view');
     });
 
-    $('#YesNoFormDiv').hide();
+    $('#FilterForm').submit(function (e) {
+        e.preventDefault();
+
+        doFilter(this, $('#TableData').data("catalogId"));
+        
+    });
 }
+
+$('#YesNoFormDiv').hide();
 
 addModalEvents();
 
@@ -174,13 +207,10 @@ $.fn.serializeObject = function () {
 
 $('a[name="ctlgBtn"]').click(function () {
     var elem = this;
-    if ($("#ProductPage").length != 0) {
-
-        $.get('/Catalog/TableData', { id: elem.dataset["id"] }).done(function (data) {
-            $("#DataPlace").html(data);
-            addModalEvents();
-        });
-
+    if ($("#DataPlace").length != 0) {
+        
+        doFilter($('#FilterForm'), elem.dataset["id"]);
+        addModalEvents();
     }
     else {
         $(location).attr('href', elem.dataset["url"]);

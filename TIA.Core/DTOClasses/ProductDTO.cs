@@ -1,10 +1,13 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace TIA.Core.DTOClasses
 {
     public record ProductDTO : CatalogObjectDTO
     {
+        public DateTime? SomeDate { get; set; }
+
         public uint Quantity { get; init; }
 
         [JsonProperty("Price")]

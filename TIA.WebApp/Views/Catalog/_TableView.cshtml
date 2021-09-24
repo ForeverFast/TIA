@@ -1,10 +1,13 @@
 ﻿@model CatalogDTO
 
 <div id="TableData" data-catalog-id="@Model.Id">
+
+    <h2>@Model.Title</h2>
+
     @if (Model?.Products != null && Model?.Products.Count() > 0)
     {
         <table id="ProductTable">
-            <tr><th>Название</th><th>Описание</th><th>Цена</th></tr>
+            <tr><th>Название</th><th>Описание</th><th>Цена</th><th>Дата</th></tr>
             @if (Model != null)
             {
                 foreach (ProductDTO productDTO in Model?.Products)

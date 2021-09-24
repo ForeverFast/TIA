@@ -13,6 +13,7 @@ namespace TIA.Core.Converters
                 ParentCatalogId = product.ParentCatalogId,
                 Title = product.Title,
                 Description = product.Description,
+                SomeDate = product.SomeDate,
                 Price = product.Price,
                 Quantity = product.Quantity,
                 IsActive = product.IsActive

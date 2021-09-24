@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TIA.BusinessLogic;
 using TIA.BusinessLogicBase.Abstractions;
+using TIA.Core.EfEntities;
 using TIA.EntityFramework;
 using TIA.EntityFramework.Services;
 
@@ -27,26 +29,31 @@ namespace TIA.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
+
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<TIADbContext>();
+
+            services.AddSingleton(typeof(TIADbContext), (s) => s.GetRequiredService<TIADbContextFactory>().CreateDbContext(null));
 
             services.AddSingleton(typeof(TIADbContextFactory));
             services.AddSingleton<ICatalogDataService, CatalogDataService>();
             services.AddSingleton<IProductDataService, ProductDataService>();
             services.AddSingleton<ITiaModel, TiaModel>();
 
-            services.AddMvc(st=> {
-
+            services.AddMvc(st =>
+            {
                 st.EnableEndpointRouting = false;
-            
-            } );
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {
@@ -55,19 +62,14 @@ namespace TIA.WebApp
 
             app.UseStaticFiles();
 
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes => {
-
+            app.UseMvc(routes =>
+            {
                 routes.MapRoute(
                    name: "default",
                    template: "{controller=Home}/{action=Index}");
-                //routes.MapRoute(
-                //  name: "catalog",
-                //  template: "{controller=Catalog}/{action=CatalogTable}");
-                //routes.MapRoute(
-                //  name: "product",
-                //  template: "{controller=Product}/{action=GetById}/{id}");
             });
         }
     }
