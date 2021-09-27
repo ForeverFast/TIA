@@ -9,9 +9,11 @@ using TIA.BusinessLogicBase.Abstractions;
 using TIA.Core.DTOClasses;
 using TIA.Extentions;
 using TIA.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TIA.WebApp.Controllers
 {
+    [Authorize]
     [Route("Catalog")]
     public class CatalogController : Controller
     {
@@ -50,14 +52,7 @@ namespace TIA.WebApp.Controllers
 
                 if (catalogDTO != null)
                 {
-                    List<ProductDTO> products = null;
-                    if (minDate != null || maxDate != null ||
-                        minPrice != null || maxPrice != null || !string.IsNullOrEmpty(title))
-                    {
-                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
-                    }
-                    else
-                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId);
+                    List<ProductDTO> products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
 
                     catalogDTO = catalogDTO with { Products = products };
 
@@ -79,14 +74,7 @@ namespace TIA.WebApp.Controllers
 
                 if (catalogDTO != null)
                 {
-                    List<ProductDTO> products = null;
-                    if (minDate != null || maxDate != null ||
-                        minPrice != null || maxPrice != null || !string.IsNullOrEmpty(title))
-                    {
-                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
-                    }
-                    else
-                        products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId);
+                    List<ProductDTO> products = await _tiaModel.GetCatalogProductsWithFiltersAsync(nId, title, minDate, maxDate, minPrice, maxPrice);
 
                     catalogDTO = catalogDTO with { Products = products };
 

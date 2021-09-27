@@ -4,13 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TIA.BusinessLogic;
 using TIA.BusinessLogicBase.Abstractions;
-using TIA.Core.EfEntities;
+using TIA.Core.AspNetCoreEntities;
 using TIA.EntityFramework;
 using TIA.EntityFramework.Services;
 
@@ -65,12 +61,13 @@ namespace TIA.WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                   name: "default",
-                   template: "{controller=Home}/{action=Index}");
-            });
+            app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //       name: "default",
+            //       template: "{controller=Home}/{action=Index}");
+            //});
         }
     }
 }

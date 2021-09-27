@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TIA.Core.EfEntities;
+using TIA.Core.AspNetCoreEntities;
 using TIA.WebApp.Models;
 
 namespace TIA.WebApp.Controllers
 {
+    [Route("Account")]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -21,22 +23,23 @@ namespace TIA.WebApp.Controllers
         }
 
         [HttpGet]
+        [Route("Register")]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Register/{model?}")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
-                // добавляем пользователя
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // установка куки
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -52,6 +55,7 @@ namespace TIA.WebApp.Controllers
         }
 
         [HttpGet]
+        [Route("Login/{returnUrl?}")]
         public IActionResult Login(string returnUrl = null)
         {
             return View(new LoginViewModel { ReturnUrl = returnUrl });
@@ -59,6 +63,7 @@ namespace TIA.WebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Login/{model?}")]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -86,7 +91,9 @@ namespace TIA.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("Logout")]
         public async Task<IActionResult> Logout()
         {
             // удаляем аутентификационные куки

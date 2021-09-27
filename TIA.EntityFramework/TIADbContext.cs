@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TIA.Core.AspNetCoreEntities;
 using TIA.Core.EfEntities;
 
 namespace TIA.EntityFramework

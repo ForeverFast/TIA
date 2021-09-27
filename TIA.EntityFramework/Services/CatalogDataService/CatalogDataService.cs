@@ -65,6 +65,7 @@ namespace TIA.EntityFramework.Services
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .Include(c => c.ParentCatalog)
                     .AsEnumerable()
+                    .Where(c => c.ParentCatalogId == null)
                     .Select(c=>c.ConvertCatalog())
                     .ToList();
 
@@ -80,7 +81,6 @@ namespace TIA.EntityFramework.Services
                     .Where(c => c.IsActive == true)
                     .IncludeFilter(c => c.Catalogs.Where(c => c.IsActive == true))
                     .Include(c => c.ParentCatalog)
-                    .AsEnumerable()
                     .Select(c => c.ConvertCatalog())
                     .ToList();
 
