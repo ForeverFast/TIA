@@ -5,16 +5,21 @@
     <td>@Model.Description</td>
     <td>@Model.Price</td>
     <td>@Model.SomeDate.GetValueOrDefault().ToShortDateString()</td>
-    <td>
-        <a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="@Model.Id" data-parent-id="@Model.ParentCatalogId"
-           data-toggle="modal" data-target="#modal-view">
-            /
-        </a>
-    </td>
-    <td>
-        <a class="btn btn-primary popupDelete" data-url="/Product/Delete" data-id="@Model.Id"
-           data-toggle="modal" data-target="#modal-view">
-            -
-        </a>
-    </td>
+    @if (User.IsInRole("admin"))
+    {
+        <td>
+            <div class="row">
+                <a class="btn btn-primary col-md-4 popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="@Model.Id" data-parent-id="@Model.ParentCatalogId"
+                   data-toggle="modal" data-target="#modal-view">
+                    /
+                </a>
+                <a class="btn btn-primary col-md-4 popupDelete" data-url="/Product/Delete" data-id="@Model.Id"
+                   data-toggle="modal" data-target="#modal-view">
+                    -
+                </a>
+            </div>
+           
+        </td>
+    }
+
 </tr>

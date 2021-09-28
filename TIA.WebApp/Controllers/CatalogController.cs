@@ -33,6 +33,7 @@ namespace TIA.WebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [Route("CatalogTable")]
         public async Task<IActionResult> CatalogTable()
         {
@@ -85,6 +86,7 @@ namespace TIA.WebApp.Controllers
             return RedirectToPage("~/View/Shared/NotFoundPage");
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [Route("CreateEdit/{parentId?}/{itemId?}")]
         public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
@@ -118,6 +120,7 @@ namespace TIA.WebApp.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("CreateEdit/{vm?}")]
         public async Task<ActionResult> CreateEdit(ModalCatalogViewModel vm)
@@ -141,6 +144,7 @@ namespace TIA.WebApp.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("Delete/{id?}")]
         public async Task<ActionResult> Delete(Guid id)

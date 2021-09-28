@@ -41,53 +41,57 @@ function addModalEvents() {
     $('#DataPage').on('click', '.popupCreateEdit', function (e) {
         var url = $(this).data('url');
 
-        $.get(url, { parentId: $(this).data('parentId'), itemId: $(this).data('itemId') }).done(function (data) {
+        $.get(url, { parentId: $(this).data('parentId'), itemId: $(this).data('itemId') })
+            .done(function (data) {
+              
+                showModal(data);
 
-            showModal(data);
+                $('#CreateEditProductForm').submit(function (e) {
+                    e.preventDefault();
 
-            $('#CreateEditProductForm').submit(function (e) {
-                e.preventDefault();
+                    if (!$('#CreateEditProductForm').valid())
+                        return;
 
-                if (!$('#CreateEditProductForm').valid())
-                    return;
+                    var form = this;
+                    var formAction = $(form).attr("action");
+                    var product = $(form).serializeObject();
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
 
-                var form = this;
-                var formAction = $(form).attr("action");
-                var product = $(form).serializeObject();
-                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    $.post(formAction, { vm: product, __RequestVerificationToken: token }).done(function (data) {
 
-                $.post(formAction, { vm: product, __RequestVerificationToken: token }).done(function (data) {
-
-                    if (emptyGuid == product["Id"]) {
-                        if (form.dataset["isEmptyCatalog"] == "True") {
-                            $.get('/Catalog/TableData', { id: product["ParentCatalogId"] }).done(function (table) {
-                                $("#DataPlace").html(table);
-                            });
-                        }
-                        else {
-                            if (data != null) {
-                                $('#ProductTable > tbody').append(data);
-                            } else {
-                                console.log('Не сохранилось...');
+                        if (emptyGuid == product["Id"]) {
+                            if (form.dataset["isEmptyCatalog"] == "True") {
+                                $.get('/Catalog/TableData', { id: product["ParentCatalogId"] }).done(function (table) {
+                                    $("#DataPlace").html(table);
+                                });
+                            }
+                            else {
+                                if (data != null) {
+                                    $('#ProductTable > tbody').append(data);
+                                } else {
+                                    console.log('Не сохранилось...');
+                                }
                             }
                         }
-                    }
-                    else {
+                        else {
 
-                        var catalogId = $('#TableData').data("catalogId");
-                        if (catalogId == product["ParentCatalogId"]) {
-                            $('#item-' + product["Id"]).get(0).outerHTML = data;
+                            var catalogId = $('#TableData').data("catalogId");
+                            if (catalogId == product["ParentCatalogId"]) {
+                                $('#item-' + product["Id"]).get(0).outerHTML = data;
+                            }
+
                         }
 
-                    }
+                        $('#modal-view').modal("hide");
+                    }).fail(function (data) {
+                        // todo?
+                    });
 
-                    $('#modal-view').modal("hide");
-                }).fail(function (data) {
-                    // todo?
                 });
-
+            })
+            .fail(function (data) {
+                console.log('Не получилось...');
             });
-        });
     });
 
     $('#DataPage').on('click', '.popupDelete', function (e) {
@@ -132,7 +136,7 @@ function addModalEvents() {
         e.preventDefault();
 
         doFilter(this, $('#TableData').data("catalogId"));
-        
+
     });
 }
 
@@ -208,7 +212,7 @@ $.fn.serializeObject = function () {
 $('a[name="ctlgBtn"]').click(function () {
     var elem = this;
     if ($("#DataPlace").length != 0) {
-        
+
         doFilter($('#FilterForm'), elem.dataset["id"]);
         addModalEvents();
     }

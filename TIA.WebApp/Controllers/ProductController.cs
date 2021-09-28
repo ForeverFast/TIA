@@ -33,6 +33,7 @@ namespace TIA.WebApp.Controllers
             return null;//View("CatalogProducts", productDTO);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         [Route("CreateEdit/{parentId?}/{itemId?}")]
         public async Task<ActionResult> CreateEdit(Guid? parentId, Guid? itemId)
@@ -66,6 +67,7 @@ namespace TIA.WebApp.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("CreateEdit/{vm?}")]
         public async Task<ActionResult> CreateEdit(ModalProductViewModel vm)
@@ -93,6 +95,7 @@ namespace TIA.WebApp.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("Delete/{id?}")]
         public async Task<ActionResult> DeleteConfirm(Guid id)
