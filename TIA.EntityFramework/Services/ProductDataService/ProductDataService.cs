@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using TIA.Core.Converters;
 using TIA.Core.DTOClasses;
 using TIA.Core.EfEntities;
+using TIA.Core.StoredProcedureModels;
 
 namespace TIA.EntityFramework.Services
 {
@@ -21,6 +25,37 @@ namespace TIA.EntityFramework.Services
                     .FirstOrDefaultAsync(c => c.Id == guid);
 
                 return result.ConvertProduct();
+            }
+        }
+
+        public virtual List<ProductDataModel> GetProductsFullData(DateTime? minDate = null, DateTime? maxDate = null, uint? minPrice = null, uint? maxPrice = null)
+        {
+            using (TIADbContext context = _contextFactory.CreateDbContext(null))
+            {
+                SqlParameter minDateParam = new SqlParameter
+                {
+                    ParameterName = "minDate",
+                    Value = minDate != null ? minDate : DBNull.Value
+                };
+                SqlParameter maxDateParam = new SqlParameter
+                {
+                    ParameterName = "maxDate",
+                    Value = maxDate != null ? maxDate : DBNull.Value
+                };
+                SqlParameter minPriceParam = new SqlParameter
+                {
+                    ParameterName = "minPrice",
+                    Value = minPrice != null ? Convert.ToInt32(minPrice) : DBNull.Value
+                };
+                SqlParameter maxPriceParam = new SqlParameter
+                {
+                    ParameterName = "maxPrice",
+                    Value = maxPrice != null ? Convert.ToInt32(maxPrice) : DBNull.Value
+                };
+
+                List<ProductDataModel> productDataModel = context.ProductDataModels.FromSqlRaw("GetProductData @minDate, @maxDate, @minPrice, @maxPrice", minDateParam, maxDateParam, minPriceParam, maxPriceParam).ToList();
+
+                return productDataModel;
             }
         }
 

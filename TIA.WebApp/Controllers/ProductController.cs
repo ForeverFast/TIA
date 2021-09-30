@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TIA.BusinessLogicBase.Abstractions;
 using TIA.Core.DTOClasses;
+using TIA.Core.StoredProcedureModels;
 using TIA.WebApp.Models;
 
 namespace TIA.WebApp.Controllers
@@ -31,6 +32,20 @@ namespace TIA.WebApp.Controllers
             ProductDTO productDTO = await _tiaModel.GetProductByIdAsync(id);
 
             return null;//View("CatalogProducts", productDTO);
+        }
+
+        [Route("ProductFullData")]
+        public IActionResult ProductFullData()
+        {
+            return View();
+        }
+
+        [Route("FilterProductFullData/{minDate?}/{maxDate?}/{minPrice?}/{maxPrice?}")]
+        public async Task<IActionResult> FilterProductFullData(DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
+        {
+            List<ProductDataModel> result = await _tiaModel.GetProductsFullDataAsync(minDate, maxDate, minPrice, maxPrice);
+
+            return PartialView("_ProductFullDataTable", result);
         }
 
         [Authorize(Roles = "admin")]

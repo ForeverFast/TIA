@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TIA.BusinessLogicBase;
 using TIA.Core.DTOClasses;
+using TIA.Core.StoredProcedureModels;
 
 namespace TIA.BusinessLogic
 {
@@ -11,6 +13,12 @@ namespace TIA.BusinessLogic
         {
             ProductDTO productDTO = await productDataService.GetById(id);
             return productDTO;
+        }
+
+        protected override List<ProductDataModel> GetProductsFullData(DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
+        {
+            List<ProductDataModel> dataModels = productDataService.GetProductsFullData(minDate, maxDate, minPrice, maxPrice);
+            return dataModels;
         }
 
         protected override async Task<ProductDTO> AddProductExecute(ProductDTO productDTO)

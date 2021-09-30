@@ -1,0 +1,37 @@
+﻿@model List<ProductDataModel>
+
+<table class="table">
+    <tr>
+        <th>Название</th>
+        <th>Описание</th>
+        <th>Цена</th>
+        <th>Дата</th>
+        <th>Каталог</th>
+        <th>Родительский каталог</th>
+    </tr>
+    @if (Model != null)
+    {
+        foreach (ProductDataModel product in Model)
+        {
+            <tr>
+                <td>@product.Title</td>
+                <td>@product.Description</td>
+                <td>@product.Price</td>
+                <td>@product.SomeDate.Value.ToShortDateString()</td>
+                <td>@product.ParentCatalogTitle</td>
+                <td>
+                    @if (product.ParentParentCatalogId == Guid.Empty)
+                    {
+                        <div>-</div>
+                    }
+                    else
+                    {
+                        @product.ParentParentCatalogTitle
+                    }
+                </td>
+
+            </tr>
+        }
+    }
+
+</table>

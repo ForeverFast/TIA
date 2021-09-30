@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TIA.EntityFramework;
 
 namespace TIA.EntityFramework.Migrations
 {
     [DbContext(typeof(TIADbContext))]
-    partial class TIADbContextModelSnapshot : ModelSnapshot
+    [Migration("20210929124134_AddProductDataModelDbSet")]
+    partial class AddProductDataModelDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

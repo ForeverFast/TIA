@@ -13,21 +13,16 @@ namespace TIA.ConsoleTest
     {
         static void Main(string[] args)
         {
-            Thh();
+            using(var db = new TIADbContextFactory().CreateDbContext(null))
+            {
+                var t = db.Catalogs.Where(p => p.IsActive == false).ToList();
+                db.Catalogs.RemoveRange(t);
+                db.SaveChanges();
 
-            Console.ReadKey();
+                Console.ReadKey();
+            }
+
         }
-
-        static async void Thh()
-        {
-            TiaModel m = new TiaModel(new CatalogDataService(), new ProductDataService());
-            var res1 = await m.GetCatalogByIdAsync(Guid.Parse("01775f27-7949-4259-4aa7-08d9777996d4"));
-            var t = Task.CurrentId;
-            var res2 = await m.GetCatalogsTreeAsync();
-
-           
-        }
-
     }
 }
 
