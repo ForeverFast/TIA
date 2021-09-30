@@ -5,11 +5,9 @@ namespace TIA.BusinessLogicBase
 {
     public abstract partial class TiaModelBase : ITiaModel, ICatalogModel, IProductModel
     {
-        protected TiaModelBase(ICatalogDataService catalogDataService,
-            IProductDataService productDataService)
+        protected TiaModelBase()
         {
-            this.catalogDataService = catalogDataService;
-            this.productDataService = productDataService;
+           
         }
     }
 }

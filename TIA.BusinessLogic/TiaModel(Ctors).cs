@@ -5,8 +5,11 @@ namespace TIA.BusinessLogic
 {
     public partial class TiaModel : TiaModelBase
     {
+        protected readonly ICatalogDataService catalogDataService;
+        protected readonly IProductDataService productDataService;
+
         public TiaModel(ICatalogDataService catalogDataService,
-            IProductDataService productDataService) : base(catalogDataService, productDataService)
+            IProductDataService productDataService)
         {
 
         }

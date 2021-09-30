@@ -5,7 +5,6 @@ namespace TIA.BusinessLogicBase
 {
     public abstract partial class TiaModelBase : ITiaModel
     {
-        protected readonly ICatalogDataService catalogDataService;
-        protected readonly IProductDataService productDataService;
+       
     }
 }

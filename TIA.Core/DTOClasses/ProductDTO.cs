@@ -12,7 +12,7 @@ namespace TIA.Core.DTOClasses
 
         [JsonProperty("Price")]
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Недопустимый возраст")]
+        [Range(1, int.MaxValue, ErrorMessage = "Недопустимое значение")]
         public uint Price { get; init; }
     }
 }
