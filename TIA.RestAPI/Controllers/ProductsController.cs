@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TIA.BusinessLogicLayerBase.Abstractions;
 using TIA.DataAccessLayer.DTOClasses;
@@ -26,6 +28,30 @@ namespace TIA.RestAPI.Controllers
             _logger = logger;
         }
 
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = new List<string>();
+                ModelState
+                    .Where(a => a.Value.Errors.Count > 0)
+                    .ToList()
+                    .ForEach(x => {
+
+                        x.Value.Errors.ToList().ForEach(y =>
+                        {
+                            errors.Add($"{x.Key} - {y.ErrorMessage}");
+                        });
+                    
+                    });
+
+
+
+                context.Result = BadRequest(new JsonCoreObject<string> { Errors = errors });
+            }
+            base.OnActionExecuting(context);
+        }
+
         [HttpGet]
         [Route("GetProductsWithFilter/{minDate?}/{maxDate?}/{minPrice?}/{maxPrice?}")]
         public async Task<ActionResult<JsonCoreObject<List<ProductDataModel>>>> GetProductsWithFilter(
@@ -44,7 +70,7 @@ namespace TIA.RestAPI.Controllers
             {
                 return new JsonCoreObject<List<ProductDataModel>>
                 {
-                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }
@@ -63,7 +89,7 @@ namespace TIA.RestAPI.Controllers
             {
                 return new JsonCoreObject<ProductDTO>
                 {
-                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }
@@ -75,14 +101,6 @@ namespace TIA.RestAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    Dictionary<string, string> errors = new Dictionary<string, string>();
-                    foreach (var item in ModelState)
-                        errors.Add(item.Key, item.Value.ToString());
-                    return new JsonCoreObject<ProductDTO> { Errors = errors };
-                }
-
                 ProductDTO product = new ProductDTO
                 {
                     Id = model.Id,
@@ -101,7 +119,7 @@ namespace TIA.RestAPI.Controllers
             {
                 return new JsonCoreObject<ProductDTO>
                 {
-                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }
@@ -113,14 +131,6 @@ namespace TIA.RestAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    Dictionary<string, string> errors = new Dictionary<string, string>();
-                    foreach (var item in ModelState)
-                        errors.Add(item.Key, item.Value.ToString());
-                    return new JsonCoreObject<ProductDTO> { Errors = errors };
-                }
-
                 ProductDTO product = new ProductDTO
                 {
                     Id = model.Id,
@@ -139,7 +149,7 @@ namespace TIA.RestAPI.Controllers
             {
                 return new JsonCoreObject<ProductDTO>
                 {
-                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }
@@ -166,7 +176,7 @@ namespace TIA.RestAPI.Controllers
             {
                 return new JsonCoreObject<bool>
                 {
-                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                    Errors = new List<string> { ex.Message }
                 };
             }
         }

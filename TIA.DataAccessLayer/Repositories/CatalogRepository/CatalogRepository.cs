@@ -112,12 +112,11 @@ namespace TIA.DataAccessLayer.Repositories
 
                 var original = context.Catalogs.FirstOrDefault(e => e.Id == id);
 
-                foreach (PropertyInfo propertyInfo in original.GetType().GetProperties())
-                {
-                    if (propertyInfo.GetValue(catalog, null) == null)
-                        propertyInfo.SetValue(catalog, propertyInfo.GetValue(original, null), null);
-                }
-                context.Entry(original).CurrentValues.SetValues(catalog);
+                original.Id = catalog.Id;
+                original.Title = catalog.Title;
+                original.Description = catalog.Description;
+                original.ParentCatalogId = catalog.ParentCatalogId;
+
                 context.SaveChanges();
 
                 return catalog.ConvertCatalog();

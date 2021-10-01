@@ -6,6 +6,6 @@ namespace TIA.RestAPI.Models
     {
         public T Object { get; set; }
 
-        public Dictionary<string, string> Errors { get; set; }
+        public List<string> Errors { get; set; }
     }
 }

@@ -84,12 +84,13 @@ namespace TIA.DataAccessLayer.Repositories
 
                 var original = context.Products.FirstOrDefault(e => e.Id == id);
 
-                foreach (PropertyInfo propertyInfo in original.GetType().GetProperties())
-                {
-                    if (propertyInfo.GetValue(product, null) == null)
-                        propertyInfo.SetValue(product, propertyInfo.GetValue(original, null), null);
-                }
-                context.Entry(original).CurrentValues.SetValues(product);
+                original.Id = product.Id;
+                original.Title = product.Title;
+                original.Description = product.Description;
+                original.ParentCatalogId = product.ParentCatalogId;
+                original.Price = product.Price;
+                original.SomeDate = product.SomeDate;
+
                 context.SaveChanges();
 
                 return product.ConvertProduct();
@@ -114,7 +115,6 @@ namespace TIA.DataAccessLayer.Repositories
         {
             using (TIA_DBContext context = _contextFactory.CreateDbContext(null))
             {
-               
                 Product product = context.Products
                     .FirstOrDefault(x => x.Id == id);
 
