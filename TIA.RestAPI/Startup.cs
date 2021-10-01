@@ -41,7 +41,7 @@ namespace TIA.RestAPI
             services.AddMvc(st =>
             {
                 st.EnableEndpointRouting = false;
-            });
+            }).AddNewtonsoftJson();
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<TIA_DBContext>();

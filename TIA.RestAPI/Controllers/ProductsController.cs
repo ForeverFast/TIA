@@ -11,6 +11,7 @@ using TIA.RestAPI.Models;
 
 namespace TIA.RestAPI.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : Controller
@@ -27,7 +28,11 @@ namespace TIA.RestAPI.Controllers
 
         [HttpGet]
         [Route("GetProductsWithFilter/{minDate?}/{maxDate?}/{minPrice?}/{maxPrice?}")]
-        public async Task<ActionResult<JsonCoreObject<List<ProductDataModel>>>> GetProductsWithFilter(DateTime? minDate, DateTime? maxDate, uint? minPrice, uint? maxPrice)
+        public async Task<ActionResult<JsonCoreObject<List<ProductDataModel>>>> GetProductsWithFilter(
+            [FromQuery] DateTime? minDate,
+            [FromQuery] DateTime? maxDate,
+            [FromQuery] uint? minPrice,
+            [FromQuery] uint? maxPrice)
         {
             try
             {
@@ -35,15 +40,18 @@ namespace TIA.RestAPI.Controllers
 
                 return new JsonCoreObject<List<ProductDataModel>> { Object = products };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonCoreObject<List<ProductDataModel>> { Object = null };
+                return new JsonCoreObject<List<ProductDataModel>>
+                {
+                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                };
             }
         }
 
         [HttpGet]
         [Route("GetProduct/{id?}")]
-        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> GetProduct(Guid id)
+        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> GetProduct([FromQuery] Guid id)
         {
             try
             {
@@ -51,22 +59,28 @@ namespace TIA.RestAPI.Controllers
 
                 return new JsonCoreObject<ProductDTO> { Object = dto };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonCoreObject<ProductDTO> { Object = null };
+                return new JsonCoreObject<ProductDTO>
+                {
+                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                };
             }
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("Create/{model?}")]
-        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> Create(InputProductData model)
+        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> Create([FromBody] InputProductData model)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-
+                    Dictionary<string, string> errors = new Dictionary<string, string>();
+                    foreach (var item in ModelState)
+                        errors.Add(item.Key, item.Value.ToString());
+                    return new JsonCoreObject<ProductDTO> { Errors = errors };
                 }
 
                 ProductDTO product = new ProductDTO
@@ -83,24 +97,30 @@ namespace TIA.RestAPI.Controllers
 
                 return new JsonCoreObject<ProductDTO> { Object = temp };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonCoreObject<ProductDTO> { Object = null };
+                return new JsonCoreObject<ProductDTO>
+                {
+                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                };
             }
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost]
+        [HttpPut]
         [Route("Update/{model?}")]
-        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> Update(InputProductData model)
+        public async Task<ActionResult<JsonCoreObject<ProductDTO>>> Update([FromBody] InputProductData model)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-
+                    Dictionary<string, string> errors = new Dictionary<string, string>();
+                    foreach (var item in ModelState)
+                        errors.Add(item.Key, item.Value.ToString());
+                    return new JsonCoreObject<ProductDTO> { Errors = errors };
                 }
-                    
+
                 ProductDTO product = new ProductDTO
                 {
                     Id = model.Id,
@@ -112,19 +132,22 @@ namespace TIA.RestAPI.Controllers
                 };
 
                 ProductDTO temp = await _tiaModel.ChangeProductAsync(product);
-                   
+
                 return new JsonCoreObject<ProductDTO> { Object = temp };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonCoreObject<ProductDTO> { Object = null };
+                return new JsonCoreObject<ProductDTO>
+                {
+                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                };
             }
         }
 
         [Authorize(Roles = "admin")]
         [HttpDelete]
         [Route("Delete/{id?}")]
-        public async Task<ActionResult<JsonCoreObject<bool>>> Delete(Guid id)
+        public async Task<ActionResult<JsonCoreObject<bool>>> Delete([FromQuery] Guid id)
         {
             try
             {
@@ -139,9 +162,12 @@ namespace TIA.RestAPI.Controllers
                     return new JsonCoreObject<bool> { Object = false };
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new JsonCoreObject<bool> { Object = false };
+                return new JsonCoreObject<bool>
+                {
+                    Errors = new Dictionary<string, string> { { "exc", ex.Message } }
+                };
             }
         }
     }

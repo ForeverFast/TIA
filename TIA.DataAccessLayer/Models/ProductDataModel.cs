@@ -15,7 +15,7 @@ namespace TIA.DataAccessLayer.Models
         public long Price { get; set; }
         public Guid ParentCatalogId { get; set; }
         public string ParentCatalogTitle { get; set; }
-        public Guid ParentParentCatalogId { get; set; }
+        public Guid? ParentParentCatalogId { get; set; }
         public string ParentParentCatalogTitle { get; set; }
     }
 }

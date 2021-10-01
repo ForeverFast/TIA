@@ -66,6 +66,9 @@ namespace TIA.DataAccessLayer.Repositories
                 if (product.SomeDate == null)
                     product.SomeDate = DateTime.Now;
 
+                if (context.Products.FirstOrDefault(c => c.Id == product.Id) != null || product.Id == Guid.Empty)
+                    product.Id = Guid.NewGuid();
+
                 EntityEntry<Product> createdResult = context.Products.Add(product);
                 context.SaveChanges();
 

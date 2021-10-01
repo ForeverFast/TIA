@@ -94,6 +94,9 @@ namespace TIA.DataAccessLayer.Repositories
                 Catalog catalog = entity.ConvertCatalogDTO();
 
                 catalog.IsActive = true;
+                if (context.Catalogs.FirstOrDefault(c => c.Id == catalog.Id) != null || catalog.Id == Guid.Empty)
+                    catalog.Id = Guid.NewGuid();
+
                 EntityEntry<Catalog> createdResult = context.Catalogs.Add(catalog);
                 context.SaveChanges();
 
@@ -115,7 +118,7 @@ namespace TIA.DataAccessLayer.Repositories
                         propertyInfo.SetValue(catalog, propertyInfo.GetValue(original, null), null);
                 }
                 context.Entry(original).CurrentValues.SetValues(catalog);
-                context.SaveChangesAsync();
+                context.SaveChanges();
 
                 return catalog.ConvertCatalog();
             }

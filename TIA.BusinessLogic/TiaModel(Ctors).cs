@@ -11,7 +11,8 @@ namespace TIA.BusinessLogic
         public TiaModel(ICatalogDataService catalogDataService,
             IProductDataService productDataService)
         {
-
+            this.catalogDataService = catalogDataService;
+            this.productDataService = productDataService;
         }
     }
 }
