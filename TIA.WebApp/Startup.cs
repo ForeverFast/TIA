@@ -24,10 +24,6 @@ namespace TIA.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            services.AddRazorPages()
-                .AddRazorRuntimeCompilation();
-
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<TIADbContext>();
 
@@ -38,6 +34,9 @@ namespace TIA.WebApp
             services.AddSingleton<IProductDataService, ProductDataService>();
             services.AddSingleton<ITiaModel, TiaModel>();
 
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
             services.AddMvc(st =>
             {
                 st.EnableEndpointRouting = false;
@@ -62,12 +61,6 @@ namespace TIA.WebApp
             app.UseAuthorization();
 
             app.UseMvc();
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //       name: "default",
-            //       template: "{controller=Home}/{action=Index}");
-            //});
         }
     }
 }

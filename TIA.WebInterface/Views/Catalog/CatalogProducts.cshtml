@@ -1,0 +1,70 @@
+﻿@model CatalogDTO
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_CatalogLayout.cshtml";
+}
+
+<div id="DataPage" class="container row">
+
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md"></div>
+            <div id="DataPlace" class="col-12">
+                @await Html.PartialAsync("_TableView", Model)
+            </div>
+            <div class="col-md"></div>
+            @await Html.PartialAsync("_YesNoDialog", "Product")
+        </div>
+    </div>
+
+    <div class="col-5">
+
+        <div class="row">
+            <h3>Фильтры</h3>
+        </div>
+
+        <form id="FilterForm" class="row" asp-action="TableData" asp-controller="Catalog" method="get" enctype="multipart/form-data">
+
+            <input id="catalogId" name="catalogId" value="@Model.Id" type="hidden" class="form-control" />
+
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="title" class="form-label">Название</label>
+                        <input id="title" name="title" type="text" class="form-control">
+                    </div>               
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="minPrice" class="form-label">Мин. Цена</label>
+                        <input id="minPrice" name="minPrice" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-5">
+                        <label for="maxPrice" class="form-label">Макс. Цена</label>
+                        <input id="maxPrice" name="maxPrice" type="number" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="minDate" class="form-label">Мин. Дата</label>
+                        <input id="minDate" name="minDate" type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="maxDate" class="form-label">Макс. Дата</label>
+                        <input id="maxDate" name="maxDate" type="date" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success relative" id="btnFilterSubmit" type="submit">Применить фильтры</button>
+            </div>
+        </form>
+
+        
+    </div>
+</div>
+

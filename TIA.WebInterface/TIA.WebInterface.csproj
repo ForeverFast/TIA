@@ -6,7 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\Catalog\CatalogProducts.cshtml" />
+    <None Include="Views\Catalog\CatalogTable.cshtml" />
+    <None Include="Views\Catalog\Index.cshtml" />
+    <None Include="Views\Catalog\_CreateEditCatalog.cshtml" />
+    <None Include="Views\Catalog\_ProductTableElementData.cshtml" />
+    <None Include="Views\Catalog\_TableView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TIA.BusinessLogicLayer.WebInterface\TIA.BusinessLogicLayer.WebInterface.csproj" />
+    <ProjectReference Include="..\TIA.BusinessLogicLayerBase\TIA.BusinessLogicLayerBase.csproj" />
+    <ProjectReference Include="..\TIA.Extentions\TIA.Extentions.csproj" />
   </ItemGroup>
 
 </Project>

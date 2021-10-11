@@ -192,6 +192,12 @@ namespace TIA.EntityFramework.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -285,13 +291,13 @@ namespace TIA.EntityFramework.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ParentCatalogId")
+                    b.Property<Guid?>("ParentCatalogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ParentCatalogTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentParentCatalogId")
+                    b.Property<Guid?>("ParentParentCatalogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ParentParentCatalogTitle")

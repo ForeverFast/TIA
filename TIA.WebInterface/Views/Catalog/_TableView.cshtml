@@ -1,0 +1,43 @@
+﻿@model CatalogDTO
+
+<div id="TableData" data-catalog-id="@Model.Id">
+
+    <h2>@Model.Title</h2>
+
+    @if (Model?.Products != null && Model?.Products.Count() > 0)
+    {
+        <table id="ProductTable">
+            <tr><th>Название</th><th>Описание</th><th>Цена</th><th>Дата</th><th></th></tr>
+            @if (Model != null)
+            {
+                foreach (ProductDTO productDTO in Model?.Products)
+                {
+                    @await Html.PartialAsync("_ProductTableElementData", productDTO)
+                }
+            }
+        </table>
+    }
+    else
+    {
+        <div id="NoElementsData">
+            <h1>Товаров нет((</h1>
+            @if (User.IsInRole("admin"))
+            {
+                <h2>Наполни меня (͡° ͜ʖ ͡°)</h2>
+            }
+
+        </div>
+    }
+
+    @if (User.IsInRole("admin"))
+    {
+        <div>
+            <a class="btn btn-primary popupCreateEdit" data-url="/Product/CreateEdit" data-item-id="0" data-parent-id="@Model.Id"
+               data-toggle="modal" data-target="#modal-view">
+                +
+            </a>
+        </div>
+    }
+
+
+</div>

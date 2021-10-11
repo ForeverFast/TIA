@@ -1,0 +1,73 @@
+﻿@model ModalProductViewModel
+
+<div class="modal-content">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Товар</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+
+    <form id="CreateEditProductForm" asp-action="CreateEdit" asp-controller="Product" method="post" enctype="multipart/form-data"
+          data-is-empty-catalog="@Model.IsEmptyCatalog">
+
+        <div class="modal-body form-horizontal">
+
+            <input asp-for="Id" type="hidden" class="form-control" />
+            <input asp-for="IsActive" type="hidden" class="form-control" />
+
+            <div class="form-group row">
+                <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Title" placeholder="Название товара" class="form-control" />
+                    <span asp-validation-for="Title"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <textarea asp-for="Description" class="form-control" placeholder="Описание товара"></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Price" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Price" class="form-control" placeholder="Цена товара"/>
+                    <span asp-validation-for="Price"></span>
+                </div>
+            </div>
+
+            @if (Model.Id == Guid.Empty)
+            {
+                <input asp-for="ParentCatalogId" type="hidden" class="form-control" />
+            }
+            else
+            {
+                <div class="form-group row">
+                    <label asp-for="ParentCatalogId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <select asp-for="ParentCatalogId" placeholder="Родительский каталог" class="form-control">
+                            @foreach (CatalogDTO catalogDTO in Model.CatalogList)
+                            {
+                                <option value="@catalogDTO.Id">@catalogDTO.Title</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <div class="modal-footer">
+            <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Отмена</button>
+            <button class="btn btn-success relative" id="btnSubmit" type="submit">
+                <i class="loader"></i>
+                Сохранить
+            </button>
+        </div>
+
+    </form>
+
+</div>

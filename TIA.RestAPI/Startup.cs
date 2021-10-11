@@ -16,6 +16,7 @@ using TIA.BusinessLogicLayerBase.Abstractions;
 using TIA.DataAccessLayer.Models;
 using TIA.DataAccessLayer.Repositories;
 using TIA.RestAPI.JwtLogic;
+using TIA.RestAPI.Services;
 
 namespace TIA.RestAPI
 {
@@ -37,6 +38,7 @@ namespace TIA.RestAPI
             services.AddSingleton<ICatalogRepository, CatalogRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ITiaModel, TiaModel>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddMvc(st =>
             {

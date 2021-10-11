@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,80 +10,122 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TIA.DataAccessLayer.Models;
 using TIA.RestAPI.JwtLogic;
+using TIA.RestAPI.Models;
+using TIA.RestAPI.Services;
 
 namespace TIA.RestAPI.Controllers
 {
     [Route("Account")]
     public class AccountController : Controller
     {
+        private readonly ITokenService _tokenService;
         private readonly UserManager<User> _userManager;
 
-        public AccountController(UserManager<User> userManager)
+        public AccountController(ITokenService tokenService, UserManager<User> userManager)
         {
+            _tokenService = tokenService;
             _userManager = userManager;
         }
 
         [HttpPost]
         [Route("token")]
-        public async Task<IActionResult> Token(string username, string password)
+        public async Task<JsonCoreObject<object>> Token(string username, string password)
         {
-            var identity = await GetIdentity(username, password);
+            ClaimsIdentity identity = await _tokenService.GetIdentity(username, password);
+
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                HttpContext.Response.StatusCode = 401;
+                return new JsonCoreObject<object>() { Object = null };
             }
 
-            var now = DateTime.UtcNow;
-            // создаем JWT-токен
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            string accessToken = _tokenService.GenerateAccessToken(identity.Claims);
+            string refreshToken = _tokenService.GenerateRefreshToken();
+
+            User user = await _userManager.FindByNameAsync(username);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            await _userManager.UpdateAsync(user);
 
             var response = new
             {
-                access_token = encodedJwt,
-                username = identity.Name
+                access_token = accessToken,
+                refresh_token = refreshToken,
+                username = username
             };
 
-            return Json(response);
+            return new JsonCoreObject<object>() { Object = response };
         }
 
-        [NonAction]
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<JsonCoreObject<object>> Refresh([FromBody] TokenApiModel tokenApiModel)
         {
-            User user = await _userManager.FindByNameAsync(username);
-           
-            if (user != null)
+            if (tokenApiModel is null || string.IsNullOrEmpty(tokenApiModel.AccessToken))
             {
-                bool checkResult = await _userManager.CheckPasswordAsync(user, password);
-                if (!checkResult)
-                    return null;
-
-                var userRoles = await _userManager.GetRolesAsync(user);
-                string role = string.Empty;
-                if (userRoles.Contains("admin"))
-                    role = "admin";
-                else if (userRoles.Contains("user"))
-                    role = "user";
-                else return null;
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
+                return new JsonCoreObject<object>
+                { 
+                    Errors = new List<string> { "Invalid client request" }
                 };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
             }
 
-            return null;
+            string accessToken = tokenApiModel.AccessToken;
+            string refreshToken = tokenApiModel.RefreshToken;
+
+            ClaimsPrincipal principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+            string username = principal.Identity.Name; //this is mapped to the Name claim by default
+
+            User user = await _userManager.FindByNameAsync(username);
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return new JsonCoreObject<object>
+                {
+                    Errors = new List<string> { "Invalid client request" }
+                };
+            }
+
+            string newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
+            string newRefreshToken = _tokenService.GenerateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            await _userManager.UpdateAsync(user);
+
+            var response = (object)new
+            {
+                access_token = newAccessToken,
+                refresh_token = newRefreshToken
+            };
+
+            return new JsonCoreObject<object>() { Object = response };
+        }
+
+        [HttpGet]
+        [Route("check")]
+        public JsonCoreObject<bool> Check([FromQuery]string token)
+        {
+            return new JsonCoreObject<bool>
+            {
+                Object = _tokenService.IsTokenValid(token)
+            };
+        }
+
+        [HttpPost, Authorize]
+        [Route("revoke")]
+        public async Task<JsonCoreObject<object>> Revoke()
+        {
+            var username = User.Identity.Name;
+            User user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                HttpContext.Response.StatusCode = 400;
+                return new JsonCoreObject<object>() { Object = null };
+            }
+                
+            user.RefreshToken = null;
+            await _userManager.UpdateAsync(user);
+
+            HttpContext.Response.StatusCode = 204;
+            return new JsonCoreObject<object>() { Object = null };
         }
     }
 }

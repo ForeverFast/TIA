@@ -1,0 +1,67 @@
+﻿@model List<CatalogDTO>
+@{
+    Layout = "~/Views/Shared/_CatalogLayout.cshtml";
+}
+
+<div id="DataPage">
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table>
+            <tr><th>Название</th><th>Идентификатор</th><th>Родитель</th></tr>
+            @foreach (CatalogDTO catalogDTO in Model)
+            {
+                <tr id="item-@catalogDTO.Id">
+                    <td>@catalogDTO.Title</td>
+                    <td>@catalogDTO.Id</td>
+                    @if (catalogDTO.ParentCatalogId != null)
+                    {
+                        <td>@catalogDTO.ParentCatalogId</td>
+                    }
+                    else
+                    {
+                        <td>Корневой каталог</td>
+                    }
+
+                    <td>
+                        <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="0" data-parent-id="@catalogDTO.Id"
+                           data-toggle="modal" data-target="#modal-view">
+                            +
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="@catalogDTO.Id" data-parent-id="@catalogDTO.ParentCatalogId"
+                           data-toggle="modal" data-target="#modal-view">
+                            /
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary popupDelete" data-url="/Catalog/Delete" data-id="@catalogDTO.Id"
+                           data-toggle="modal" data-target="#modal-view">
+                            -
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h1>Каталогов нет((</h1>
+        <h2>Наполни меня (͡° ͜ʖ ͡°)</h2>
+    }
+
+    <div>
+        <a class="btn btn-primary popupCreateEdit" data-url="/Catalog/CreateEdit" data-item-id="0" data-parent-id="0"
+           data-toggle="modal" data-target="#modal-view">
+            +
+        </a>
+    </div>
+
+    @await Html.PartialAsync("_YesNoDialog", "Catalog")
+
+</div>
+
+
+
+

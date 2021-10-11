@@ -1,0 +1,15 @@
+﻿@model List<CatalogDTO>
+
+<ul>
+    @foreach (CatalogDTO catalogDTO in Model)
+    {
+        <li id="treeNode-@catalogDTO.Id">
+            <span>
+                <a data-url="@($"/Catalog/Products?id={catalogDTO.Id}")" data-id="@catalogDTO.Id" name="ctlgBtn" class="nav-link">@catalogDTO.Title</a>
+            </span>
+        </li>
+
+        if (catalogDTO.Catalogs.Any())
+            @Html.Partial("~/Views/Shared/Components/CatalogTree/_TreeNode.cshtml", catalogDTO.Catalogs);
+    }
+</ul>

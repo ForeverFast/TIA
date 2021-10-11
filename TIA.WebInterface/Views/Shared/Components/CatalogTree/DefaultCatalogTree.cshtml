@@ -1,0 +1,6 @@
+﻿@model List<CatalogDTO>
+
+@if (Model.Any())
+    @await Html.PartialAsync("~/Views/Shared/Components/CatalogTree/_TreeNode.cshtml", Model)
+
+

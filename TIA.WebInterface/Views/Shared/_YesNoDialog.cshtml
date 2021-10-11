@@ -1,0 +1,19 @@
+﻿@model string
+<div class="modal-content" id="YesNoFormDiv">
+   
+    <form id="YesNoForm" asp-controller="@Model" asp-action="Delete" method="post" enctype="multipart/form-data">
+
+        <div class="modal-header">
+            <h4 class="modal-title">Подтверждение действия</h4>
+        </div>
+
+        <div class="modal-footer">
+            <button data-dismiss="modal" id="cancel" class="btn btn-default" type="button">Нет</button>
+            <button class="btn btn-success relative" id="btnSubmit" type="submit">
+                <i class="loader"></i>
+                Да
+            </button>
+        </div>
+
+    </form>
+</div>

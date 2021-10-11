@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.BusinessLogicLayer", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIA.WebInterface", "TIA.WebInterface\TIA.WebInterface.csproj", "{315341E1-BCD0-4094-9692-41BCA1580174}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TIA.BusinessLogicLayer.WebInterface", "TIA.BusinessLogicLayer.WebInterface\TIA.BusinessLogicLayer.WebInterface.csproj", "{6522B652-2023-4F69-8C98-81881955D657}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{315341E1-BCD0-4094-9692-41BCA1580174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{315341E1-BCD0-4094-9692-41BCA1580174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{315341E1-BCD0-4094-9692-41BCA1580174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6522B652-2023-4F69-8C98-81881955D657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6522B652-2023-4F69-8C98-81881955D657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6522B652-2023-4F69-8C98-81881955D657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6522B652-2023-4F69-8C98-81881955D657}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{9EEA5CAC-23D7-45F7-9036-C259BD059459} = {B8AAF08D-6E7C-447F-B65E-5EF4D700D0B0}
 		{CA6DD40D-04DA-42B3-AD56-4FCCA51331B2} = {B8AAF08D-6E7C-447F-B65E-5EF4D700D0B0}
 		{315341E1-BCD0-4094-9692-41BCA1580174} = {B8AAF08D-6E7C-447F-B65E-5EF4D700D0B0}
+		{6522B652-2023-4F69-8C98-81881955D657} = {B8AAF08D-6E7C-447F-B65E-5EF4D700D0B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B67D2D5B-448E-452D-9A70-8D6C3302F231}

@@ -12,10 +12,9 @@ using TIA.RestAPI.Models;
 
 namespace TIA.RestAPI.Controllers
 {
-
     [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
-    [Route("api/Catalogs")]
+    [Route("api/[controller]")]
     public class CatalogsController : Controller
     {
         private readonly ITiaModel _tiaModel;
@@ -26,28 +25,6 @@ namespace TIA.RestAPI.Controllers
         {
             _tiaModel = tiaModel;
             _logger = logger;
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            if (!ModelState.IsValid)
-            {
-                var errors = new List<string>();
-                ModelState
-                    .Where(a => a.Value.Errors.Count > 0)
-                    .ToList()
-                    .ForEach(x => {
-
-                        x.Value.Errors.ToList().ForEach(y =>
-                        {
-                            errors.Add($"{x.Key} - {y.ErrorMessage}");
-                        });
-
-                    });
-
-                context.Result = BadRequest(new JsonCoreObject<string> { Errors = errors });
-            }
-            base.OnActionExecuting(context);
         }
 
         [HttpGet]
